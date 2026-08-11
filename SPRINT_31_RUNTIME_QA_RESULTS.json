@@ -1,0 +1,381 @@
+{
+  "sprint": "Sprint 31 — Teacher Runtime QA (Phase 1)",
+  "timestamp": "2026-07-29T13:07:20.888Z",
+  "summary": {
+    "pages_tested": 45,
+    "bugs_found": 13,
+    "not_implemented": 14,
+    "runtime_successes": 30,
+    "passes": 30,
+    "fails": 13,
+    "warnings": 2
+  },
+  "results": [
+    {
+      "page": "Teacher Dashboard",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:05:45.089Z"
+    },
+    {
+      "page": "Dashboard Stats",
+      "status": "PASS",
+      "details": "Found 4/4 expected items",
+      "timestamp": "2026-07-29T13:05:45.100Z"
+    },
+    {
+      "page": "Dashboard Navigation",
+      "status": "PASS",
+      "details": "14 links found",
+      "timestamp": "2026-07-29T13:05:45.939Z"
+    },
+    {
+      "page": "Groups List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:05:49.926Z"
+    },
+    {
+      "page": "Groups Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:05:53.374Z"
+    },
+    {
+      "page": "Groups Show",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:05:55.990Z"
+    },
+    {
+      "page": "Groups Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:05:58.473Z"
+    },
+    {
+      "page": "Students List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:00.474Z"
+    },
+    {
+      "page": "Students Search",
+      "status": "PASS",
+      "details": "Search submitted",
+      "timestamp": "2026-07-29T13:06:05.641Z"
+    },
+    {
+      "page": "Students Filter",
+      "status": "PASS",
+      "details": "Filter applied",
+      "timestamp": "2026-07-29T13:06:09.375Z"
+    },
+    {
+      "page": "Students Show",
+      "status": "WARN",
+      "details": "No student show link found",
+      "timestamp": "2026-07-29T13:06:12.504Z"
+    },
+    {
+      "page": "Attendance List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:17.170Z"
+    },
+    {
+      "page": "Attendance Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:18.903Z"
+    },
+    {
+      "page": "Attendance Show",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:20.803Z"
+    },
+    {
+      "page": "Lessons List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:22.693Z"
+    },
+    {
+      "page": "Lessons Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:24.884Z"
+    },
+    {
+      "page": "Lessons Recycle Bin",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:27.005Z"
+    },
+    {
+      "page": "Lessons Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:30.345Z"
+    },
+    {
+      "page": "Resources List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:32.474Z"
+    },
+    {
+      "page": "Resources Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:39.261Z"
+    },
+    {
+      "page": "Resources Recycle Bin",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:41.010Z"
+    },
+    {
+      "page": "Resources Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:43.272Z"
+    },
+    {
+      "page": "Resources Search",
+      "status": "WARN",
+      "details": "Search input not found",
+      "timestamp": "2026-07-29T13:06:45.164Z"
+    },
+    {
+      "page": "Exams List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:46.950Z"
+    },
+    {
+      "page": "Exams Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:48.347Z"
+    },
+    {
+      "page": "Exams Recycle Bin",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:49.732Z"
+    },
+    {
+      "page": "Exams Questions",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:52.378Z"
+    },
+    {
+      "page": "Exams Attempts",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:52.895Z"
+    },
+    {
+      "page": "Exams Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:53.414Z"
+    },
+    {
+      "page": "Exams Time Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:53.928Z"
+    },
+    {
+      "page": "Question Bank List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:55.318Z"
+    },
+    {
+      "page": "Question Bank Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:56.646Z"
+    },
+    {
+      "page": "Question Bank Recycle Bin",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:06:57.918Z"
+    },
+    {
+      "page": "Question Bank Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:06:59.693Z"
+    },
+    {
+      "page": "Reservations List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:01.704Z"
+    },
+    {
+      "page": "Reservations Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:03.019Z"
+    },
+    {
+      "page": "Reservations Recycle Bin",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:04.267Z"
+    },
+    {
+      "page": "Reservations Show",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:07:06.003Z"
+    },
+    {
+      "page": "Reservations Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:07:06.517Z"
+    },
+    {
+      "page": "Assistants List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:10.940Z"
+    },
+    {
+      "page": "Assistants Create",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:12.856Z"
+    },
+    {
+      "page": "Assistants Edit",
+      "status": "FAIL",
+      "details": "Page did not load",
+      "timestamp": "2026-07-29T13:07:14.636Z"
+    },
+    {
+      "page": "Term End Form",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:15.823Z"
+    },
+    {
+      "page": "Profile Edit",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:17.752Z"
+    },
+    {
+      "page": "Notifications List",
+      "status": "PASS",
+      "details": "HTTP 200",
+      "timestamp": "2026-07-29T13:07:19.203Z"
+    }
+  ],
+  "bugs": [
+    {
+      "id": "BUG-1",
+      "page": "Groups Show",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-2",
+      "page": "Groups Edit",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-3",
+      "page": "Attendance Show",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-4",
+      "page": "Lessons Edit",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-5",
+      "page": "Resources Edit",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-6",
+      "page": "Exams Questions",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-7",
+      "page": "Exams Attempts",
+      "description": "Page failed to load: normalizeUrl(href)/attempts",
+      "error": null
+    },
+    {
+      "id": "BUG-8",
+      "page": "Exams Edit",
+      "description": "Page failed to load: normalizeUrl(href)/edit",
+      "error": null
+    },
+    {
+      "id": "BUG-9",
+      "page": "Exams Time Edit",
+      "description": "Page failed to load: normalizeUrl(href)/time",
+      "error": null
+    },
+    {
+      "id": "BUG-10",
+      "page": "Question Bank Edit",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-11",
+      "page": "Reservations Show",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    },
+    {
+      "id": "BUG-12",
+      "page": "Reservations Edit",
+      "description": "Page failed to load: normalizeUrl(href)/edit",
+      "error": null
+    },
+    {
+      "id": "BUG-13",
+      "page": "Assistants Edit",
+      "description": "Page failed to load: normalizeUrl(href)",
+      "error": null
+    }
+  ],
+  "not_implemented": [
+    "Grades Module (no controller/model per spec section 18.1)",
+    "Reports Module (no dedicated controller per spec section 18.1)",
+    "Teacher Settings (no settings module per spec section 18.1)",
+    "Password Reset for Teacher (per spec section 18.1)",
+    "Email Verification (per spec section 18.1)",
+    "Two-Factor Authentication (per spec section 18.1)",
+    "Import Students CSV/Excel (per spec section 18.1)",
+    "Export Data Excel/PDF (per spec section 18.1)",
+    "Bulk Create Lessons (per spec section 18.1)",
+    "Teacher Calendar (per spec section 18.1)",
+    "Student Progress Tracking (per spec section 18.1)",
+    "Messaging System (per spec section 18.1)",
+    "Announcements Module (per spec section 18.1)",
+    "Parent Access (per spec section 18.1)"
+  ]
+}

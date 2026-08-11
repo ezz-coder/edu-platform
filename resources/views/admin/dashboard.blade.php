@@ -1,65 +1,157 @@
-<x-dashboard-layout title="لوحة الأدمن">
-    <div class="space-y-6">
-        <!-- Welcome Message -->
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <h1 class="text-2xl font-bold text-gray-900">مرحباً بك، {{ auth()->user()->name }}</h1>
-            <p class="mt-2 text-gray-600">أهلاً بك في لوحة تحكم الأدمن</p>
+<x-dashboard-layout title="لوحة التحكم">
+    <div class="space-y-8">
+        <x-page-header title="لوحة تحكم الأدمن" description="مرحباً بك في لوحة التحكم، {{ $currentUser->name }}" />
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Teachers -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">إجمالي المدرسين</p>
+                        <p class="stat-value">{{ $stats['teachers'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-people text-xl text-primary-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">إجمالي الطلاب</p>
+                        <p class="stat-value">{{ $stats['students'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-success-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-person-badge text-xl text-success-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Groups -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">المجموعات النشطة</p>
+                        <p class="stat-value">{{ $stats['active_groups'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-info-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-collection text-xl text-info-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">الموارد التعليمية</p>
+                        <p class="stat-value">{{ $stats['resources'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-warning-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-folder2 text-xl text-warning-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Teachers -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">مدرسون منتظرون</p>
+                        <p class="stat-value text-warning-600">{{ $stats['pending_teachers'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-warning-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-hourglass-split text-xl text-warning-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suspended Teachers -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">مدرسون معلقون</p>
+                        <p class="stat-value text-danger-600">{{ $stats['suspended_teachers'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-danger-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-person-x text-xl text-danger-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exams -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">الامتحانات المنشورة</p>
+                        <p class="stat-value">{{ $stats['published_exams'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-file-earmark-text text-xl text-primary-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assistants -->
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="stat-label">المساعدون</p>
+                        <p class="stat-value">{{ $stats['assistants'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-info-50 flex items-center justify-center flex-shrink-0">
+                        <i class="bi bi-person-workspace text-xl text-info-600"></i>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- User Count Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="mr-4">
-                        <p class="text-sm text-gray-600">إجمالي المستخدمين</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $totalUsers }}</p>
-                    </div>
-                </div>
+        <!-- Second Row: Additional Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="stat-card">
+                <p class="stat-label">الحجوزات</p>
+                <p class="stat-value">{{ $stats['reservations'] }}</p>
             </div>
-
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center">
-                    <div class="p-3 bg-yellow-100 rounded-lg">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="mr-4">
-                        <p class="text-sm text-gray-600">قيد الانتظار</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $pendingUsers }}</p>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <p class="stat-label">جلسات الحضور</p>
+                <p class="stat-value">{{ $stats['attendance_sessions'] }}</p>
             </div>
-
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center">
-                    <div class="p-3 bg-green-100 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="mr-4">
-                        <p class="text-sm text-gray-600">نشط</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $activeUsers }}</p>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <p class="stat-label">الطلاب غير النشطين</p>
+                <p class="stat-value text-danger-600">{{ $stats['inactive_students'] }}</p>
             </div>
         </div>
+
+        @if ($latestTerm)
+        <div class="stat-card">
+            <p class="stat-label">آخر فصل دراسي</p>
+            <p class="text-lg font-bold text-text-primary mt-1">{{ $latestTerm->title }} - {{ $latestTerm->year }}</p>
+            <span class="badge {{ $latestTerm->status === 'active' ? 'badge-success' : 'badge-neutral' }} mt-2">
+                {{ $latestTerm->status === 'active' ? 'نشط' : 'مؤرشف' }}
+            </span>
+        </div>
+        @endif
 
         <!-- Quick Actions -->
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">إجراءات سريعة</h3>
-            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                </svg>
-                إدارة المستخدمين
-            </a>
+        <div class="card p-6">
+            <h3 class="section-title">إجراءات سريعة</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ route('admin.teacher-requests') }}" class="btn-primary">
+                    <i class="bi bi-person-check"></i> طلبات المدرسين
+                </a>
+                <a href="{{ route('admin.teachers') }}" class="btn-primary">
+                    <i class="bi bi-people"></i> إدارة المدرسين
+                </a>
+                <a href="{{ route('admin.activity-log') }}" class="btn-secondary">
+                    <i class="bi bi-activity"></i> سجل النشاط
+                </a>
+                <a href="{{ route('admin.settings') }}" class="btn-secondary">
+                    <i class="bi bi-gear"></i> الإعدادات
+                </a>
+            </div>
         </div>
     </div>
 </x-dashboard-layout>

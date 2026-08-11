@@ -1,0 +1,44 @@
+{
+    "login": {
+        "status": "failed",
+        "issues": [
+            "Login failed - HTTP 419",
+            "Error: "
+        ],
+        "actual_results": []
+    },
+    "dashboard": {
+        "status": "passed",
+        "issues": [
+            "Header \"مساحة مجموعاتي\" not found",
+            "Statistics cards not found"
+        ],
+        "actual_results": [
+            "Dashboard loaded - HTTP 200"
+        ]
+    },
+    "profile": {
+        "status": "failed",
+        "issues": [
+            "Profile page failed to load - HTTP 404"
+        ],
+        "actual_results": []
+    },
+    "change_password": {
+        "status": "failed",
+        "issues": [
+            "Change password page failed to load - HTTP 404"
+        ],
+        "actual_results": []
+    },
+    "groups": {
+        "status": "passed",
+        "issues": [
+            "Create group functionality not found",
+            "Groups listing not found"
+        ],
+        "actual_results": [
+            "Groups listing loaded - HTTP 200"
+        ]
+    }
+}

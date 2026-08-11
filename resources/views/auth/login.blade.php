@@ -5,11 +5,17 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
+        @if (session('status'))
+            <div class="mb-4 font-medium text-sm text-green-600">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <!-- Mobile -->
         <div>
-            <x-input-label for="email" :value="__('البريد الإلكتروني')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-label for="mobile" :value="__('رقم الموبايل')" />
+            <x-text-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile')" required autofocus />
+            <x-input-error :messages="$errors->get('mobile')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -32,16 +38,17 @@
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('نسيت كلمة المرور؟') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
+        <div class="flex flex-col items-center justify-center mt-4 gap-3">
+            <x-primary-button>
                 {{ __('تسجيل الدخول') }}
             </x-primary-button>
+
+            <a class="text-sm text-blue-600 hover:text-blue-900" href="{{ route('register.teacher') }}">
+                {{ __('تسجيل مدرس جديد') }}
+            </a>
+            <a class="text-sm text-blue-600 hover:text-blue-900" href="{{ route('register.student') }}">
+                {{ __('تسجيل طالب جديد') }}
+            </a>
         </div>
     </form>
 </x-guest-layout>

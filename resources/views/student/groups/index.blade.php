@@ -66,7 +66,9 @@
                         </div>
 
                         <div class="pt-4 border-t border-gray-200">
-                            <p class="text-xs text-gray-400">الانضمام متاح في Sprint 4</p>
+                            <a href="{{ route('register.student') }}" class="text-blue-600 hover:text-blue-900 text-sm font-medium">
+                                سجّل في هذه المجموعة
+                            </a>
                         </div>
                     </div>
                 @endforeach

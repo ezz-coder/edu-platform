@@ -105,6 +105,17 @@
                         @enderror
                     </div>
 
+                    <!-- Max Students -->
+                    <div>
+                        <label for="max_students" class="block text-sm font-medium text-gray-700 mb-2">الحد الأقصى للطلاب *</label>
+                        <input type="number" id="max_students" name="max_students" required min="1"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            value="{{ old('max_students', 30) }}">
+                        @error('max_students')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Submit Button -->
                     <div class="flex items-center space-x-4 space-x-reverse">
                         <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">

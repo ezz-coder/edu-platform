@@ -21,5 +21,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Development-only demo accounts (admin/teacher/assistant/student).
+        // Runs only when APP_ENV=local (guarded inside the seeder).
+        $this->call(DevelopmentDemoSeeder::class);
     }
 }

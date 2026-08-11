@@ -17,6 +17,21 @@
         @csrf
         @method('patch')
 
+        @if ($user->role === 'teacher' && $user->teacher_code)
+        <div class="bg-primary-50 border border-primary-200 rounded-lg p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <label class="block text-sm font-medium text-primary-700">كود المدرس (Teacher Code)</label>
+                    <p class="mt-1 text-2xl font-bold text-primary-900 tracking-wider" dir="ltr" id="teacher-code">{{ $user->teacher_code }}</p>
+                    <p class="mt-1 text-xs text-primary-600">استخدم هذا الكود للطلاب للتسجيل في مجموعاتك</p>
+                </div>
+                <button type="button" onclick="copyTeacherCode()" class="btn-secondary btn-sm">
+                    <i class="bi bi-clipboard"></i> نسخ
+                </button>
+            </div>
+        </div>
+        @endif
+
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />

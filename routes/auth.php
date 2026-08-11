@@ -8,6 +8,9 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\StudentRegistrationController;
+use App\Http\Controllers\Auth\TeacherRegistrationController;
+use App\Http\Controllers\AssistantAuthController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +19,18 @@ Route::middleware('guest')->group(function () {
         ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::get('register/teacher', [TeacherRegistrationController::class, 'create'])
+        ->name('register.teacher');
+
+    Route::post('register/teacher', [TeacherRegistrationController::class, 'store'])
+        ->name('register.teacher.store');
+
+    Route::get('register/student', [StudentRegistrationController::class, 'create'])
+        ->name('register.student');
+
+    Route::post('register/student', [StudentRegistrationController::class, 'store'])
+        ->name('register.student.store');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
@@ -33,6 +48,14 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+});
+
+Route::middleware(['guest:assistant', 'web'])->group(function () {
+    // Sprint 18 — Assistant login (separate guard).
+    Route::get('assistant/login', [AssistantAuthController::class, 'showLogin'])
+        ->name('assistant.login');
+
+    Route::post('assistant/login', [AssistantAuthController::class, 'login']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -56,4 +79,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    // Sprint 18 — Assistant logout (own guard).
+    Route::post('assistant/logout', [AssistantAuthController::class, 'logout'])
+        ->name('assistant.logout');
 });

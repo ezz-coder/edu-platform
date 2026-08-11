@@ -1,0 +1,72 @@
+{
+    "admin": [
+        {
+            "feature": "Login",
+            "status": "❌ FAILED",
+            "notes": "Status: 419"
+        }
+    ],
+    "teacher": [
+        {
+            "feature": "Login",
+            "status": "❌ FAILED",
+            "notes": "Status: 419"
+        },
+        {
+            "feature": "Dashboard",
+            "status": "✅ OK",
+            "notes": ""
+        },
+        {
+            "feature": "Teacher Code",
+            "status": "❌ NOT VISIBLE",
+            "notes": ""
+        },
+        {
+            "feature": "Groups",
+            "status": "✅ OK",
+            "notes": ""
+        }
+    ],
+    "student": [
+        {
+            "feature": "Login",
+            "status": "❌ FAILED",
+            "notes": "Status: 419"
+        },
+        {
+            "feature": "Dashboard",
+            "status": "✅ OK",
+            "notes": ""
+        },
+        {
+            "feature": "Resources",
+            "status": "✅ OK",
+            "notes": ""
+        }
+    ],
+    "assistant": [
+        {
+            "feature": "Login",
+            "status": "❌ FAILED",
+            "notes": "Status: 419"
+        },
+        {
+            "feature": "Dashboard",
+            "status": "✅ OK",
+            "notes": ""
+        }
+    ],
+    "special_checks": [
+        {
+            "feature": "Add Student to Group",
+            "status": "❌ FAILED",
+            "notes": "Status: 419"
+        },
+        {
+            "feature": "Teacher Code in Registration",
+            "status": "❌ NOT FOUND",
+            "notes": ""
+        }
+    ]
+}
