@@ -119,6 +119,8 @@ ROUTE_AUDIT_REPORT.md
 *_FINAL_*.md
 *_RUNTIME_REPORT.md
 *_REPORT_AR.md
+# Allow the official Sprint 69 deployment report (this is the required deliverable)
+!SPRINT_DEPLOYMENT_FINAL_REPORT.md
 
 # Ad-hoc test binaries/scripts
 *.bat
