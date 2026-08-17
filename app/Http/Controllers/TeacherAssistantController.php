@@ -28,6 +28,7 @@ class TeacherAssistantController extends Controller
         'can_view_groups' => 'مشاهدة المجموعات',
         'can_manage_lessons' => 'إدارة الدروس',
         'can_manage_exams' => 'إدارة الامتحانات',
+        'can_manage_grades' => 'إدارة الدرجات',
     ];
 
     public function index(): View

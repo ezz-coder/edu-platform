@@ -9,6 +9,7 @@ use App\Models\AttendanceSession;
 use App\Models\Exam;
 use App\Models\ExamQuestion;
 use App\Models\GroupEnrollment;
+use App\Models\Lesson;
 use App\Models\QuestionBank;
 use App\Models\Resource;
 use App\Models\Reservation;
@@ -17,6 +18,7 @@ use App\Models\TeacherActivity;
 use App\Utilities\NotificationHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 /**
@@ -76,6 +78,57 @@ class AssistantController extends Controller
             'items' => $deleted,
             'type' => 'exam',
         ]);
+    }
+
+    public function examsCreate(): View
+    {
+        $groups = StudyGroup::where('teacher_id', $this->teacherId())->orderBy('title')->get();
+
+        return view('assistant.exams.create', [
+            'header' => 'إنشاء امتحان',
+            'groups' => $groups,
+        ]);
+    }
+
+    public function examsStore(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'duration_minutes' => ['required', 'integer', 'min:1'],
+            'starts_at' => ['nullable', 'date'],
+            'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
+            'group_ids' => ['required', 'array', 'min:1'],
+            'group_ids.*' => ['integer', 'exists:study_groups,id'],
+        ]);
+
+        $exam = Exam::create([
+            'teacher_id' => $this->teacherId(),
+            'academic_term_id' => $this->activeTermId(),
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'duration_minutes' => $validated['duration_minutes'],
+            'starts_at' => $validated['starts_at'] ?? null,
+            'ends_at' => $validated['ends_at'] ?? null,
+            'status' => 'draft',
+        ]);
+
+        $exam->targetGroups()->sync($validated['group_ids']);
+
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'exam_created',
+            'category' => 'exam',
+            'description' => "تم إنشاء امتحان {$exam->title} بحالة مسودة (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        TeacherActivity::log($this->teacherId(), 'exam_created', 'إنشاء امتحان', "تم إنشاء امتحان {$exam->title} بحالة مسودة (بواسطة مساعد)");
+
+        return redirect()->route('assistant.exams.questions', $exam)->with('success', 'تم إنشاء الامتحان (مسودة). أضف الأسئلة ثم انشره للطلاب.');
     }
 
     public function examsQuestions(Exam $exam): View
@@ -238,6 +291,10 @@ class AssistantController extends Controller
     {
         $this->authorizeExam($exam);
 
+        if (! $exam->canRestore()) {
+            return back()->with('error', 'لا يمكن استرجاع الامتحان بعد مرور أكثر من 7 أيام على الحذف.');
+        }
+
         if ($exam->trashed()) {
             $exam->restore();
         }
@@ -261,6 +318,10 @@ class AssistantController extends Controller
     public function examsForceDelete(Exam $exam): RedirectResponse
     {
         $this->authorizeExam($exam);
+
+        if (! $exam->canForceDelete()) {
+            return back()->with('error', 'لا يمكن الحذف النهائي قبل مرور 7 أيام على الحذف. يمكنك الاسترجاع خلال هذه الفترة.');
+        }
 
         if ($exam->trashed()) {
             $exam->forceDelete();
@@ -847,12 +908,174 @@ class AssistantController extends Controller
                 'status' => 'closed',
                 'closed_at' => now(),
             ]);
+
+            // Apply consecutive-absence rule
+            $this->applyAbsenceRule($session, $absentIds);
         }
 
         TeacherActivity::log($this->teacherId(), 'attendance_session_closed', 'إنهاء حصة حضور', "تم إنهاء حصة حضور (بواسطة مساعد)");
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'attendance_session_closed',
+            'category' => 'attendance',
+            'description' => "تم إنهاء حصة حضور (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
 
         return redirect()->route('assistant.attendance.show', $session)
             ->with('success', 'تم إنهاء الحصة وتسجيل الغياب.');
+    }
+
+    public function attendanceReopen(AttendanceSession $session): RedirectResponse
+    {
+        $this->authorizeSession($session);
+
+        if ($session->status !== 'closed') {
+            return back()->with('error', 'هذه الجلسة ليست مغلقة.');
+        }
+
+        $session->update([
+            'status' => 'open',
+            'closed_at' => null,
+        ]);
+
+        TeacherActivity::log(
+            $this->teacherId(),
+            'attendance_session_reopened',
+            'إعادة فتح جلسة حضور',
+            "تمت إعادة فتح جلسة حضور مجموعة {$session->group->title} (درس رقم {$session->lesson_number}) بواسطة مساعد"
+        );
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'attendance_session_reopened',
+            'category' => 'attendance',
+            'description' => "تمت إعادة فتح جلسة حضور مجموعة {$session->group->title} (درس رقم {$session->lesson_number})",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        return redirect()->route('assistant.attendance.show', $session)
+            ->with('success', 'تمت إعادة فتح الجلسة. يمكنك تسجيل الحضور وتعديله الآن.');
+    }
+
+    public function attendanceUpdateRecord(Request $request, AttendanceSession $session): RedirectResponse
+    {
+        $this->authorizeSession($session);
+
+        if ($session->isOpen()) {
+            return back()->with('error', 'أغلق الحصة أولاً قبل تصحيح الحضور يدوياً.');
+        }
+
+        $validated = $request->validate([
+            'student_id' => ['required', 'integer', 'exists:users,id'],
+            'status' => ['required', 'in:present,absent'],
+        ]);
+
+        // The student must belong to this group.
+        $enrollment = GroupEnrollment::where('student_id', $validated['student_id'])
+            ->where('group_id', $session->group_id)
+            ->where('status', 'enrolled')
+            ->first();
+
+        if (! $enrollment) {
+            return back()->with('error', 'هذا الطالب غير مسجل في هذه المجموعة.');
+        }
+
+        $record = AttendanceRecord::firstOrNew([
+            'attendance_session_id' => $session->id,
+            'student_id' => $validated['student_id'],
+            'group_id' => $session->group_id,
+        ]);
+
+        if ($validated['status'] === 'absent') {
+            $record->attendance_type = 'absent';
+            $record->scanned_at = $record->scanned_at ?? now();
+            $record->save();
+            $this->applyAbsenceRule($session, collect([$validated['student_id']]));
+        } else {
+            $record->attendance_type = 'present';
+            $record->scanned_at = $record->scanned_at ?? now();
+            $record->save();
+
+            // A present mark clears any removal caused by absence.
+            if (in_array($enrollment->status, ['removed', 'inactive_due_to_absence'])) {
+                $enrollment->update(['status' => 'enrolled', 'inactivated_at' => null]);
+            }
+        }
+
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'attendance_updated',
+            'category' => 'attendance',
+            'description' => "تم تصحيح حضور الطالب ({$validated['status']}) في جلسة {$session->id}",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        return back()->with('success', 'تم تحديث حالة الحضور.');
+    }
+
+    private function applyAbsenceRule(AttendanceSession $session, \Illuminate\Support\Collection $absentStudentIds): void
+    {
+        if ($absentStudentIds->isEmpty()) {
+            return;
+        }
+
+        foreach ($absentStudentIds as $studentId) {
+            $enrollment = GroupEnrollment::where('student_id', $studentId)
+                ->where('group_id', $session->group_id)
+                ->where('status', 'enrolled')
+                ->first();
+
+            if (! $enrollment) {
+                continue;
+            }
+
+            $history = AttendanceRecord::where('student_id', $studentId)
+                ->where('group_id', $session->group_id)
+                ->whereHas('session', fn ($q) => $q->where('teacher_id', $this->teacherId()))
+                ->with('session')
+                ->get()
+                ->sortByDesc(fn ($r) => $r->session->attendance_date->timestamp)
+                ->values();
+
+            $consecutive = 0;
+            foreach ($history as $record) {
+                if ($record->attendance_type === 'absent') {
+                    $consecutive++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($consecutive >= 2) {
+                $enrollment->update(['status' => 'inactive_due_to_absence', 'requested_group_id' => null]);
+
+                TeacherActivity::log(
+                    $this->teacherId(),
+                    'student_removed_absence',
+                    'إزالة بسبب الغياب',
+                    "تم إزالة الطالب {$enrollment->student->name} من مجموعة {$session->group->title} لغيابه مرتين متتاليتين (بواسطة نظام المساعد)."
+                );
+                ActivityLog::log([
+                    'actor_id' => auth('assistant')->id(),
+                    'actor_type' => 'assistant',
+                    'actor_type_label' => 'مساعد',
+                    'action' => 'student_removed_absence',
+                    'category' => 'student',
+                    'description' => "إزالة تلقائية للطالب بسبب غيابين متتاليين: {$enrollment->student->name}",
+                    'owner_id' => $this->teacherId(),
+                    'owner_type' => 'user',
+                ]);
+            }
+        }
     }
 
     private function recordAttendance(AttendanceSession $session, array $input): RedirectResponse
@@ -1368,8 +1591,280 @@ class AssistantController extends Controller
 
         TeacherActivity::log($this->teacherId(), 'reservation_created', 'إنشاء حجز', "تم إنشاء حجز {$reservation->title} (بواسطة مساعد)");
 
-        return redirect()->route('assistant.dashboard')
+        return redirect()->route('assistant.reservations.index')
             ->with('success', 'تم إنشاء الحجز بنجاح. حالياً في حالة مسودة.');
+    }
+
+    public function reservationsIndex(Request $request): View
+    {
+        $query = Reservation::where('teacher_id', $this->teacherId())
+            ->withCount(['items as reserved_count'])
+            ->with(['targetGroups' => function ($q) {
+                $q->select('study_groups.id', 'study_groups.title');
+            }])
+            ->withCount(['items as delivered_count' => function ($q) {
+                $q->where('delivery_status', 'delivered');
+            }])
+            ->withCount(['items as not_delivered_count' => function ($q) {
+                $q->where('delivery_status', 'pending');
+            }]);
+
+        // Search
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by type
+        if ($type = $request->input('type')) {
+            $query->where('type', $type);
+        }
+
+        // Filter by status
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        $reservations = $query->latest()->paginate(15);
+
+        return view('assistant.reservations.index', [
+            'header' => 'الحجوزات',
+            'reservations' => $reservations,
+            'types' => Reservation::types(),
+            'filters' => $request->only(['search', 'type', 'status']),
+        ]);
+    }
+
+    public function reservationsShow(Reservation $reservation): View
+    {
+        $this->authorizeReservation($reservation);
+
+        $items = $reservation->items()
+            ->with(['student', 'group'])
+            ->latest('reserved_at')
+            ->paginate(20);
+
+        return view('assistant.reservations.show', [
+            'header' => $reservation->title,
+            'reservation' => $reservation,
+            'items' => $items,
+        ]);
+    }
+
+    public function reservationsEdit(Reservation $reservation): View
+    {
+        $this->authorizeReservation($reservation);
+
+        if ($reservation->isArchived()) {
+            abort(403, 'لا يمكن تعديل حجز مؤرشف.');
+        }
+
+        $groups = StudyGroup::where('teacher_id', $this->teacherId())->orderBy('title')->get();
+
+        return view('assistant.reservations.edit', [
+            'header' => 'تعديل حجز',
+            'reservation' => $reservation,
+            'groups' => $groups,
+            'types' => Reservation::types(),
+        ]);
+    }
+
+    public function reservationsUpdate(Request $request, Reservation $reservation): RedirectResponse
+    {
+        $this->authorizeReservation($reservation);
+
+        if ($reservation->isArchived()) {
+            abort(403, 'لا يمكن تعديل حجز مؤرشف.');
+        }
+
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'type' => ['required', 'string', 'in:' . implode(',', array_keys(Reservation::types()))],
+            'quantity' => ['nullable', 'integer', 'min:1'],
+            'open_date' => ['nullable', 'date'],
+            'close_date' => ['nullable', 'date', 'after_or_equal:open_date'],
+            'status' => ['required', 'in:draft,open,closed'],
+            'group_ids' => ['required', 'array', 'min:1'],
+            'group_ids.*' => ['integer', 'exists:study_groups,id'],
+        ]);
+
+        $oldStatus = $reservation->status;
+
+        $reservation->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'type' => $validated['type'],
+            'quantity' => $validated['quantity'] ?? 0,
+            'open_date' => $validated['open_date'] ?? null,
+            'close_date' => $validated['close_date'] ?? null,
+            'status' => $validated['status'],
+        ]);
+
+        $reservation->targetGroups()->sync($validated['group_ids']);
+
+        // Log status changes
+        if ($oldStatus !== $validated['status']) {
+            $statusLabel = match($validated['status']) {
+                'open' => 'فتح حجز',
+                'closed' => 'إغلاق حجز',
+                'draft' => 'تعديل حجز (مسودة)',
+                default => 'تحديث حجز',
+            };
+            TeacherActivity::log($this->teacherId(), 'reservation_updated', $statusLabel, "تم {$statusLabel} {$reservation->title} (بواسطة مساعد)");
+            ActivityLog::log([
+                'actor_id' => auth('assistant')->id(),
+                'actor_type' => 'assistant',
+                'actor_type_label' => 'مساعد',
+                'action' => 'reservation_updated',
+                'category' => 'reservation',
+                'description' => "تم {$statusLabel} {$reservation->title} (بواسطة مساعد)",
+                'owner_id' => $this->teacherId(),
+                'owner_type' => 'user',
+            ]);
+
+            // Notify students when opening or closing a reservation
+            if ($validated['status'] === 'open') {
+                $studentIds = NotificationHelper::groupStudentIds($validated['group_ids']);
+                NotificationHelper::notifyStudents(
+                    $this->teacherId(),
+                    $studentIds,
+                    'reservation',
+                    'حجز جديد متاح',
+                    "تم فتح حجز جديد: {$reservation->title}",
+                    route('student.reservations.show', $reservation)
+                );
+            } elseif ($validated['status'] === 'closed') {
+                $studentIds = NotificationHelper::groupStudentIds($validated['group_ids']);
+                NotificationHelper::notifyStudents(
+                    $this->teacherId(),
+                    $studentIds,
+                    'reservation',
+                    'تم إغلاق الحجز',
+                    "تم إغلاق الحجز: {$reservation->title}. لا يمكن الحجز بعد الآن.",
+                    route('student.reservations.show', $reservation)
+                );
+            }
+        } else {
+            TeacherActivity::log($this->teacherId(), 'reservation_updated', 'تعديل حجز', "تم تعديل حجز {$reservation->title} (بواسطة مساعد)");
+            ActivityLog::log([
+                'actor_id' => auth('assistant')->id(),
+                'actor_type' => 'assistant',
+                'actor_type_label' => 'مساعد',
+                'action' => 'reservation_updated',
+                'category' => 'reservation',
+                'description' => "تم تعديل حجز {$reservation->title} (بواسطة مساعد)",
+                'owner_id' => $this->teacherId(),
+                'owner_type' => 'user',
+            ]);
+        }
+
+        return redirect()->route('assistant.reservations.index')->with('success', 'تم تحديث الحجز بنجاح');
+    }
+
+    public function reservationsCancel(Reservation $reservation): RedirectResponse
+    {
+        $this->authorizeReservation($reservation);
+
+        if ($reservation->isArchived()) {
+            abort(403, 'لا يمكن إلغاء حجز مؤرشف.');
+        }
+
+        if ($reservation->status === 'closed') {
+            return back()->with('error', 'الحجز مغلق بالفعل.');
+        }
+
+        $reservation->update(['status' => 'closed']);
+
+        TeacherActivity::log($this->teacherId(), 'reservation_cancelled', 'إلغاء حجز', "تم إلغاء حجز {$reservation->title} (بواسطة مساعد)");
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'reservation_cancelled',
+            'category' => 'reservation',
+            'description' => "تم إلغاء حجز {$reservation->title} (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        // Notify students about closing
+        $studentIds = NotificationHelper::groupStudentIds($reservation->targetGroups->pluck('id')->all());
+        NotificationHelper::notifyStudents(
+            $this->teacherId(),
+            $studentIds,
+            'reservation',
+            'تم إغلاق الحجز',
+            "تم إغلاق الحجز: {$reservation->title}. لا يمكن الحجز بعد الآن.",
+            route('student.reservations.show', $reservation)
+        );
+
+        return redirect()->route('assistant.reservations.index')->with('success', 'تم إلغاء الحجز بنجاح.');
+    }
+
+    public function reservationsMarkDelivered(Reservation $reservation, \App\Models\ReservationItem $item): RedirectResponse
+    {
+        $this->authorizeReservation($reservation);
+
+        if ($reservation->isArchived()) {
+            abort(403, 'لا يمكن تعديل حجز مؤرشف.');
+        }
+
+        $item->update([
+            'delivery_status' => 'delivered',
+            'delivered_at' => now(),
+        ]);
+
+        TeacherActivity::log($this->teacherId(), 'delivery_confirmed', 'تأكيد تسليم', "تم تسليم حجز إلى {$item->student->name} للحجز {$reservation->title} (بواسطة مساعد)");
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'delivery_confirmed',
+            'category' => 'reservation',
+            'description' => "تم تسليم حجز إلى {$item->student->name} للحجز {$reservation->title} (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        return back()->with('success', 'تم تأكيد التسليم.');
+    }
+
+    public function reservationsUndoDelivery(Reservation $reservation, \App\Models\ReservationItem $item): RedirectResponse
+    {
+        $this->authorizeReservation($reservation);
+
+        if ($reservation->isArchived()) {
+            abort(403, 'لا يمكن تعديل حجز مؤرشف.');
+        }
+
+        $item->update([
+            'delivery_status' => 'pending',
+            'delivered_at' => null,
+        ]);
+
+        TeacherActivity::log($this->teacherId(), 'delivery_cancelled', 'إلغاء تسليم', "تم إلغاء تسليم حجز من {$item->student->name} للحجز {$reservation->title} (بواسطة مساعد)");
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'delivery_cancelled',
+            'category' => 'reservation',
+            'description' => "تم إلغاء تسليم حجز من {$item->student->name} للحجز {$reservation->title} (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        return back()->with('success', 'تم إلغاء التسليم.');
+    }
+
+    private function authorizeReservation(Reservation $reservation): void
+    {
+        if ($reservation->teacher_id !== $this->teacherId()) {
+            abort(403, 'غير مصرح لك بالوصول إلى هذا الحجز');
+        }
     }
 
     /* ============================================================= */
@@ -1626,6 +2121,119 @@ class AssistantController extends Controller
         TeacherActivity::log($this->teacherId(), 'lesson_deleted', 'حذف درس', "تم حذف درس {$lesson->title} (بواسطة مساعد)");
 
         return redirect()->route('assistant.lessons.index')->with('success', 'تم حذف الدرس بنجاح');
+    }
+
+    public function lessonsMoveUp(Lesson $lesson): RedirectResponse
+    {
+        $this->authorizeLesson($lesson);
+
+        $previous = Lesson::forTeacher($this->teacherId())
+            ->where('group_id', $lesson->group_id)
+            ->where('display_order', '<', $lesson->display_order)
+            ->orderByDesc('display_order')
+            ->first();
+
+        if ($previous) {
+            DB::transaction(function () use ($lesson, $previous) {
+                $previousOrder = $previous->display_order;
+                $currentOrder = $lesson->display_order;
+                $lesson->update(['display_order' => $previousOrder]);
+                $previous->refresh();
+                $previous->update(['display_order' => $currentOrder]);
+            });
+        }
+
+        return back()->with('success', 'تم تحريك الدرس للأعلى');
+    }
+
+    public function lessonsMoveDown(Lesson $lesson): RedirectResponse
+    {
+        $this->authorizeLesson($lesson);
+
+        $next = Lesson::forTeacher($this->teacherId())
+            ->where('group_id', $lesson->group_id)
+            ->where('display_order', '>', $lesson->display_order)
+            ->orderBy('display_order')
+            ->first();
+
+        if ($next) {
+            DB::transaction(function () use ($lesson, $next) {
+                $nextOrder = $next->display_order;
+                $currentOrder = $lesson->display_order;
+                $lesson->update(['display_order' => $nextOrder]);
+                $next->refresh();
+                $next->update(['display_order' => $currentOrder]);
+            });
+        }
+
+        return back()->with('success', 'تم تحريك الدرس للأسفل');
+    }
+
+    public function lessonsRecycleBin(): View
+    {
+        $deleted = Lesson::onlyTrashed()
+            ->forTeacher($this->teacherId())
+            ->with('group')
+            ->latest()
+            ->paginate(20);
+
+        return view('assistant.recycle-bin.index', [
+            'header' => 'سلة المحذوفات - الدروس',
+            'items' => $deleted,
+            'type' => 'lesson',
+        ]);
+    }
+
+    public function lessonsRestore($lesson): RedirectResponse
+    {
+        $lesson = Lesson::withTrashed()
+            ->forTeacher($this->teacherId())
+            ->findOrFail($lesson);
+
+        if ($lesson->trashed()) {
+            $lesson->restore();
+        }
+
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'lesson_restored',
+            'category' => 'lesson',
+            'description' => "تم استرجاع درس {$lesson->title} (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        TeacherActivity::log($this->teacherId(), 'lesson_restored', 'استرجاع درس', "تم استرجاع درس {$lesson->title} (بواسطة مساعد)");
+
+        return back()->with('success', 'تم استرجاع الدرس بنجاح');
+    }
+
+    public function lessonsForceDelete($lesson): RedirectResponse
+    {
+        $lesson = Lesson::withTrashed()
+            ->forTeacher($this->teacherId())
+            ->findOrFail($lesson);
+
+        if ($lesson->trashed()) {
+            $lesson->forceDelete();
+        }
+
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'lesson_permanent_deleted',
+            'category' => 'lesson',
+            'description' => "تم حذف درس {$lesson->title} نهائياً (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        TeacherActivity::log($this->teacherId(), 'lesson_permanent_deleted', 'حذف نهائي درس', "تم حذف درس {$lesson->title} نهائياً (بواسطة مساعد)");
+
+        return back()->with('success', 'تم الحذف النهائي بنجاح');
     }
 
     /* ============================================================= */

@@ -190,6 +190,40 @@ class StudentExamController extends Controller
     }
 
     /**
+     * Review the exam attempt (questions + student's answers + correct answers).
+     * Only allowed if:
+     * - exam.allow_review_after_finish = true
+     * - attempt is finished
+     * - attempt belongs to the active student account
+     */
+    public function review(ExamAttempt $attempt): View
+    {
+        $this->authorizeAttempt($attempt);
+
+        $exam = $attempt->exam;
+
+        if (! $exam->allow_review_after_finish) {
+            abort(403, 'المراجعة غير مسموحة لهذا الامتحان.');
+        }
+
+        if (! $attempt->isFinished()) {
+            abort(403, 'لا يمكن مراجعة الامتحان قبل إنهائه.');
+        }
+
+        $attempt->load(['answers.question']);
+        $questions = $exam->questions()->orderBy('sort_order')->get();
+        $answers = $attempt->answers->keyBy('question_id');
+
+        return view('student.exams.review', [
+            'header' => 'مراجعة الامتحان - ' . $exam->title,
+            'attempt' => $attempt,
+            'exam' => $exam,
+            'questions' => $questions,
+            'answers' => $answers,
+        ]);
+    }
+
+    /**
      * Auto-save answer during exam.
      */
     public function autoSave(Request $request, ExamAttempt $attempt): RedirectResponse

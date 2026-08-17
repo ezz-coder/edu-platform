@@ -49,5 +49,41 @@
                 </div>
             </div>
         </div>
+
+        <!-- Recent Activity -->
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-text-primary">آخر النشاطات</h2>
+                    <p class="text-sm text-text-secondary mt-1">آخر 15 نشاطاً قمت به على المنصة.</p>
+                </div>
+            </div>
+
+            @if($activities && $activities->count() > 0)
+                <div class="space-y-3">
+                    @foreach($activities as $activity)
+                        <div class="flex items-start gap-3 p-3 rounded-lg bg-bg-secondary/50 border border-border-subtle">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="bi bi-activity text-primary text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-2 flex-wrap">
+                                    <p class="font-medium text-text-primary text-sm">{{ $activity->category }}</p>
+                                    <span class="text-xs text-text-secondary whitespace-nowrap">
+                                        {{ $activity->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-text-secondary mt-1">{{ $activity->description }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-8 text-text-secondary">
+                    <i class="bi bi-inbox text-4xl mb-2 opacity-50"></i>
+                    <p>لا توجد نشاطات حتى الآن.</p>
+                </div>
+            @endif
+        </div>
     </div>
 </x-dashboard-layout>

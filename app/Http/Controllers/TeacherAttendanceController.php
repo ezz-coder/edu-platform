@@ -399,6 +399,30 @@ class TeacherAttendanceController extends Controller
         }
     }
 
+    public function reopen(AttendanceSession $session): RedirectResponse
+    {
+        $this->authorizeSession($session);
+
+        if ($session->status !== 'closed') {
+            return back()->with('error', 'هذه الجلسة ليست مغلقة.');
+        }
+
+        $session->update([
+            'status' => 'open',
+            'closed_at' => null,
+        ]);
+
+        TeacherActivity::log(
+            auth()->id(),
+            'attendance_session_reopened',
+            'إعادة فتح جلسة حضور',
+            "تمت إعادة فتح جلسة حضور مجموعة {$session->group->title} (درس رقم {$session->lesson_number})"
+        );
+
+        return redirect()->route('teacher.attendance.show', $session)
+            ->with('success', 'تمت إعادة فتح الجلسة. يمكنك تسجيل الحضور وتعديله الآن.');
+    }
+
     private function authorizeSession(AttendanceSession $session): void
     {
         if ($session->teacher_id !== auth()->id()) {

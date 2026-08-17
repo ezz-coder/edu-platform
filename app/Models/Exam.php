@@ -99,4 +99,22 @@ class Exam extends Model
     {
         return $this->status === 'closed';
     }
+
+    public function canRestore(): bool
+    {
+        if (! $this->trashed()) {
+            return false;
+        }
+
+        return $this->deleted_at->diffInDays(now()) <= 7;
+    }
+
+    public function canForceDelete(): bool
+    {
+        if (! $this->trashed()) {
+            return false;
+        }
+
+        return $this->deleted_at->diffInDays(now()) > 7;
+    }
 }

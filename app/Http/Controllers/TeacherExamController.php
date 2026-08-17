@@ -82,25 +82,14 @@ class TeacherExamController extends Controller
             'duration_minutes' => $validated['duration_minutes'],
             'starts_at' => $validated['starts_at'] ?? null,
             'ends_at' => $validated['ends_at'] ?? null,
-            'status' => 'visible',
+            'status' => 'draft',
         ]);
 
         $exam->targetGroups()->sync($validated['group_ids']);
 
-        TeacherActivity::log(auth()->id(), 'exam_created', 'إنشاء امتحان', "تم إنشاء امتحان {$exam->title}");
+        TeacherActivity::log(auth()->id(), 'exam_created', 'إنشاء امتحان', "تم إنشاء امتحان {$exam->title} بحالة مسودة");
 
-        // Notify targeted students (one each, never notify teacher per student).
-        $studentIds = NotificationHelper::groupStudentIds($validated['group_ids']);
-        NotificationHelper::notifyStudents(
-            auth()->id(),
-            $studentIds,
-            'exam_created',
-            'امتحان جديد',
-            "تم إنشاء امتحان جديد: {$exam->title}",
-            route('student.exams.index')
-        );
-
-        return redirect()->route('teacher.exams.questions', $exam)->with('success', 'تم إنشاء الامتحان. أضف الأسئلة الآن.');
+        return redirect()->route('teacher.exams.questions', $exam)->with('success', 'تم إنشاء الامتحان (مسودة). أضف الأسئلة ثم انشره للطلاب.');
     }
 
     public function questions(Exam $exam): View
@@ -287,6 +276,10 @@ class TeacherExamController extends Controller
     {
         $this->authorizeExam($exam);
 
+        if (! $exam->canRestore()) {
+            return back()->with('error', 'لا يمكن استرجاع الامتحان بعد مرور أكثر من 7 أيام على الحذف.');
+        }
+
         if ($exam->trashed()) {
             $exam->restore();
         }
@@ -299,6 +292,10 @@ class TeacherExamController extends Controller
     public function forceDelete(Exam $exam): RedirectResponse
     {
         $this->authorizeExam($exam);
+
+        if (! $exam->canForceDelete()) {
+            return back()->with('error', 'لا يمكن الحذف النهائي قبل مرور 7 أيام على الحذف. يمكنك الاسترجاع خلال هذه الفترة.');
+        }
 
         if ($exam->trashed()) {
             $exam->forceDelete();
@@ -321,7 +318,7 @@ class TeacherExamController extends Controller
             'duration_minutes' => $exam->duration_minutes,
             'starts_at' => $exam->starts_at,
             'ends_at' => $exam->ends_at,
-            'status' => 'visible',
+            'status' => 'draft',
         ]);
 
         $copy->targetGroups()->sync($exam->targetGroups->pluck('id'));

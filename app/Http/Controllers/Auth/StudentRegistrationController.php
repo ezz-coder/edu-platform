@@ -23,6 +23,7 @@ class StudentRegistrationController extends Controller
     {
         $teacher = null;
         $groups = collect();
+        $invalidCode = false;
 
         $code = $request->query('code');
 
@@ -37,6 +38,9 @@ class StudentRegistrationController extends Controller
                     ->where('status', 'active')
                     ->latest()
                     ->get();
+            } else {
+                // Teacher code was submitted but not found — show error feedback
+                $invalidCode = true;
             }
         }
 
@@ -44,6 +48,7 @@ class StudentRegistrationController extends Controller
             'code' => $code,
             'teacher' => $teacher,
             'groups' => $groups,
+            'invalidCode' => $invalidCode,
         ]);
     }
 

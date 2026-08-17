@@ -93,6 +93,7 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/{session}', [TeacherAttendanceController::class, 'show'])->name('attendance.show');
     Route::post('/attendance/{session}/close', [TeacherAttendanceController::class, 'close'])->name('attendance.close');
+    Route::post('/attendance/{session}/reopen', [TeacherAttendanceController::class, 'reopen'])->name('attendance.reopen');
     Route::post('/attendance/{session}/scan', [TeacherAttendanceController::class, 'scan'])->name('attendance.scan');
     Route::post('/attendance/{session}/record', [TeacherAttendanceController::class, 'updateRecord'])->name('attendance.record.update');
 
@@ -214,6 +215,8 @@ Route::middleware(['web', 'assistant'])->prefix('assistant')->name('assistant.')
         Route::get('/attendance/{session}', [AssistantController::class, 'attendanceShow'])->name('attendance.show');
         Route::post('/attendance/{session}/scan', [AssistantController::class, 'attendanceScan'])->name('attendance.scan');
         Route::post('/attendance/{session}/close', [AssistantController::class, 'attendanceClose'])->name('attendance.close');
+        Route::post('/attendance/{session}/reopen', [AssistantController::class, 'attendanceReopen'])->name('attendance.reopen');
+        Route::post('/attendance/{session}/record', [AssistantController::class, 'attendanceUpdateRecord'])->name('attendance.record.update');
     });
 
     Route::middleware(['assistant:can_manage_students'])->group(function () {
@@ -244,18 +247,32 @@ Route::middleware(['web', 'assistant'])->prefix('assistant')->name('assistant.')
         Route::get('/lessons', [AssistantController::class, 'lessonsIndex'])->name('lessons.index');
         Route::get('/lessons/create', [AssistantController::class, 'lessonsCreate'])->name('lessons.create');
         Route::post('/lessons', [AssistantController::class, 'lessonsStore'])->name('lessons.store');
+        Route::get('/lessons/recycle-bin', [AssistantController::class, 'lessonsRecycleBin'])->name('lessons.recycle-bin');
+        Route::post('/lessons/{lesson}/move-up', [AssistantController::class, 'lessonsMoveUp'])->name('lessons.move-up');
+        Route::post('/lessons/{lesson}/move-down', [AssistantController::class, 'lessonsMoveDown'])->name('lessons.move-down');
         Route::get('/lessons/{lesson}/edit', [AssistantController::class, 'lessonsEdit'])->name('lessons.edit');
         Route::put('/lessons/{lesson}', [AssistantController::class, 'lessonsUpdate'])->name('lessons.update');
         Route::delete('/lessons/{lesson}', [AssistantController::class, 'lessonsDestroy'])->name('lessons.destroy');
+        Route::post('/lessons/{lesson}/restore', [AssistantController::class, 'lessonsRestore'])->name('lessons.restore');
+        Route::delete('/lessons/{lesson}/force-delete', [AssistantController::class, 'lessonsForceDelete'])->name('lessons.force-delete');
     });
 
     Route::middleware(['assistant:can_manage_reservations'])->group(function () {
+        Route::get('/reservations', [AssistantController::class, 'reservationsIndex'])->name('reservations.index');
         Route::get('/reservations/create', [AssistantController::class, 'reservationsCreate'])->name('reservations.create');
         Route::post('/reservations', [AssistantController::class, 'reservationsStore'])->name('reservations.store');
+        Route::get('/reservations/{reservation}', [AssistantController::class, 'reservationsShow'])->name('reservations.show');
+        Route::get('/reservations/{reservation}/edit', [AssistantController::class, 'reservationsEdit'])->name('reservations.edit');
+        Route::put('/reservations/{reservation}', [AssistantController::class, 'reservationsUpdate'])->name('reservations.update');
+        Route::post('/reservations/{reservation}/cancel', [AssistantController::class, 'reservationsCancel'])->name('reservations.cancel');
+        Route::post('/reservations/{reservation}/items/{item}/deliver', [AssistantController::class, 'reservationsMarkDelivered'])->name('reservations.items.deliver');
+        Route::post('/reservations/{reservation}/items/{item}/undo-deliver', [AssistantController::class, 'reservationsUndoDelivery'])->name('reservations.items.undo-deliver');
     });
 
     Route::middleware(['assistant:can_manage_exams'])->group(function () {
         Route::get('/exams', [AssistantController::class, 'examsIndex'])->name('exams.index');
+        Route::get('/exams/create', [AssistantController::class, 'examsCreate'])->name('exams.create');
+        Route::post('/exams', [AssistantController::class, 'examsStore'])->name('exams.store');
         Route::get('/exams/recycle-bin', [AssistantController::class, 'examsRecycleBin'])->name('exams.recycle-bin');
         Route::get('/exams/{exam}/questions', [AssistantController::class, 'examsQuestions'])->name('exams.questions');
         Route::post('/exams/{exam}/questions', [AssistantController::class, 'examsAddQuestion'])->name('exams.questions.add');
@@ -316,6 +333,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/exams/attempt/{attempt}', [StudentExamController::class, 'take'])->name('exams.take');
     Route::post('/exams/attempt/{attempt}/submit', [StudentExamController::class, 'submit'])->name('exams.submit');
     Route::get('/exams/attempt/{attempt}/result', [StudentExamController::class, 'result'])->name('exams.result');
+    Route::get('/exams/attempt/{attempt}/review', [StudentExamController::class, 'review'])->name('exams.review');
     Route::post('/exams/attempt/{attempt}/leave', [StudentExamController::class, 'leave'])->name('exams.leave');
     Route::post('/exams/attempt/{attempt}/auto-save', [StudentExamController::class, 'autoSave'])->name('exams.autoSave');
 
@@ -336,5 +354,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read.all');
 });
+
+Route::get('auth/entry', [App\Http\Controllers\Auth\EntryController::class, 'create'])->name('auth.entry')->middleware('guest');
 
 require __DIR__.'/auth.php';

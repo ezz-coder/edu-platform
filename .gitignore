@@ -1,3 +1,4 @@
+# ---------- Laravel runtime / security ----------
 *.log
 .DS_Store
 .env
@@ -25,3 +26,127 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# ---------- Deployment / secrets ----------
+# Never commit files that hold real credentials
+deploy/secrets/
+*.pem
+*.key.pem
+id_rsa
+id_rsa.pub
+*.crt
+*.p12
+*.cer
+
+# ---------- QA / runtime artifacts (Sprint 69 policy) ----------
+# Cookies / sessions captured during testing
+*cookie*.txt
+cookies*.txt
+*_cookies.txt
+*_cookie.txt
+*session.xml
+
+# Screenshots / captured browser output
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Cloudflare tunnel runtime
+cloudflared.exe
+cloudflared_*.txt
+cloudflared_*.log
+cloudflared*.err
+cloudflared*.out
+
+# Temp QA / test scripts and artifacts
+*_qa_*
+_qa_*
+tmp_*.php
+tmp_*.txt
+tmp_*.json
+tmp_*.html
+test-results/
+test_*.php
+test_*.json
+test_*.html
+*_out/
+qa_pages/
+*.zip
+email
+set_password.php
+
+# Local HTTP capture / diagnostics
+*.html
+response.txt
+headers.txt
+route_refs.txt
+ctrl_refs.txt
+logparse*.txt
+
+# Playwright browser binaries
+pw-browsers/
+playwright/
+
+# PHPUnit local cache
+.phpunit.result.cache
+
+# ---------- Ad-hoc QA / test scripts (Sprint 69 policy) ----------
+# Top-level underscore / temp scripts
+_*.php
+_*.cjs
+_*.mjs
+_*.txt
+_*.ps1
+_*.py
+_*.bat
+
+# Sprint / test runtime QA artifacts
+*_runtime_*.php
+*_runtime_*.cjs
+*_runtime_*.mjs
+sprint*_*.mjs
+sprint*_*.cjs
+sprint*_*.php
+sprint*_output*.txt
+sprint*_test*.mjs
+player/playwright-test/
+
+# Root-level QA reports that may contain credentials
+CREDENTIALS_SUMMARY.md
+ROUTE_AUDIT_REPORT.md
+*_AUDIT_REPORT.md
+*_FINAL_*.md
+*_RUNTIME_REPORT.md
+*_REPORT_AR.md
+
+# Ad-hoc test binaries/scripts
+*.bat
+*.py
+*.ps1
+actual_login_test.ps1
+student_reg_temp.php
+set_password.php
+serve.err
+serve.log
+server*.log
+server*.out.log
+
+# Playwright test suites
+playwright-test/
+playwright
+.pw-browsers/
+pw-browsers/
+test-results/
+
+# ---------- Remaining ad-hoc QA (Sprint 69) ----------
+check_*.php
+complete_*.php
+full_*.php
+http_*.php
+perform_*.php
+tmp_pwtest.cjs
+SPRINT_46_*.json
+SPRINT_45_*.md
+SPRINT_47_*.md
+SPRINT_

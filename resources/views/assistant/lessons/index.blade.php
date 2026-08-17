@@ -5,6 +5,10 @@
         :action="'<a href=\''.route('assistant.lessons.create').'\' class=\'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium\'><i class=\'bi bi-plus-lg\'></i> درس جديد</a>'"
     />
 
+    <div class="mb-4">
+        <a href="{{ route('assistant.lessons.recycle-bin') }}" class="text-gray-600 hover:underline">سلة المحذوفات - الدروس</a>
+    </div>
+
     @if (session('success'))
         <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-lg text-sm">{{ session('success') }}</div>
     @endif
@@ -35,6 +39,14 @@
                         </td>
                         <td class="px-4 py-3">
                             <div class="flex flex-wrap gap-2">
+                                <form method="POST" action="{{ route('assistant.lessons.move-up', $lesson) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-gray-600 hover:underline" title="تحريك للأعلى">↑</button>
+                                </form>
+                                <form method="POST" action="{{ route('assistant.lessons.move-down', $lesson) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-gray-600 hover:underline" title="تحريك للأسفل">↓</button>
+                                </form>
                                 <a href="{{ route('assistant.lessons.edit', $lesson) }}" class="text-blue-600 hover:underline">تعديل</a>
                                 <form method="POST" action="{{ route('assistant.lessons.destroy', $lesson) }}" class="hidden" id="delLesson{{ $lesson->id }}">
                                     @csrf @method('DELETE')
@@ -43,7 +55,7 @@
                                 <x-confirm-modal
                                     :id="'delLessonModal' . $lesson->id"
                                     title="حذف الدرس"
-                                    body="سيتم حذف الدرس نهائياً. الموارد المرتبطة به تصبح مصادر عامة."
+                                    body="سيتم نقل الدرس إلى سلة المحذوفات. الموارد المرتبطة به تصبح مصادر عامة."
                                     confirm-text="حذف"
                                     cancel-text="إلغاء"
                                     :form-id="'delLesson' . $lesson->id"

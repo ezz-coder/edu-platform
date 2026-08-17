@@ -113,7 +113,13 @@
                             <i class="bi bi-trash text-lg"></i>
                             <span>سلة المحذوفات</span>
                         </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('profile.edit') }}" :active="request()->routeIs('profile.*')">
+                            <i class="bi bi-person text-lg"></i>
+                            <span>حسابي</span>
+                        </x-sidebar-link>
                     @elseif($currentUser->role === 'student')
+>>>>>>>
+
                         <x-sidebar-link href="{{ route('student.resources.home') }}" :active="request()->routeIs('student.resources.*')">
                             <i class="bi bi-grid-1x2 text-lg"></i>
                             <span>المصادر</span>
@@ -175,8 +181,14 @@
                             <i class="bi bi-bell text-lg"></i>
                             <span>الإشعارات</span>
                         </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('assistant.profile.edit') }}" :active="request()->routeIs('assistant.profile.*')">
+                            <i class="bi bi-person text-lg"></i>
+                            <span>حسابي</span>
+                        </x-sidebar-link>
                     @endif
                 </nav>
+>>>>>>>
+
 
                 <!-- User Info -->
                 <div class="p-4 border-t border-border-light flex-shrink-0">
@@ -300,9 +312,11 @@
             <a href="{{ route('assistant.notifications.index') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.notifications.*') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
                 <i class="bi bi-bell text-xl"></i><span>الإشعارات</span>
             </a>
-            <a href="{{ route('assistant.dashboard') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.dashboard') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
+            <a href="{{ route('assistant.profile.edit') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.profile.*') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
                 <i class="bi bi-person text-xl"></i><span>حسابي</span>
             </a>
+>>>>>>>
+
         </nav>
         @endif
         @endif

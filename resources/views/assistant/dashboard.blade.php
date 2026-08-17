@@ -48,7 +48,7 @@
             @endif
 
             @if ($assistant->canPerm('can_manage_reservations'))
-                <a href="{{ route('assistant.reservations.create') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-purple-400 transition">
+                <a href="{{ route('assistant.reservations.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-purple-400 transition">
                     <div class="flex items-center gap-3">
                         <span class="w-10 h-10 rounded-full bg-purple-50 text-purple-700 flex items-center justify-center text-xl"><i class="bi bi-calendar-event"></i></span>
                         <span class="font-semibold text-gray-900">إدارة الحجوزات</span>

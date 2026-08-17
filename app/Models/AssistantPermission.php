@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'can_view_groups',
     'can_manage_lessons',
     'can_manage_exams',
+    'can_manage_grades',
 ])]
 class AssistantPermission extends Model
 {
@@ -30,6 +31,7 @@ class AssistantPermission extends Model
             'can_view_groups' => 'boolean',
             'can_manage_lessons' => 'boolean',
             'can_manage_exams' => 'boolean',
+            'can_manage_grades' => 'boolean',
         ];
     }
 

@@ -28,7 +28,16 @@
                     @endphp
                     <tr>
                         <td class="px-4 py-3 font-medium text-gray-900">{{ $item->title }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $type === 'question_bank' ? 'بنك الأسئلة' : 'امتحان' }}</td>
+                        <td class="px-4 py-3 text-gray-600">
+                            @php
+                                $typeLabel = match ($type) {
+                                    'question_bank' => 'بنك الأسئلة',
+                                    'lesson' => 'درس',
+                                    default => 'امتحان',
+                                };
+                            @endphp
+                            {{ $typeLabel }}
+                        </td>
                         <td class="px-4 py-3 text-gray-600">{{ $item->deleted_at?->format('Y-m-d H:i') ?? '—' }}</td>
                         <td class="px-4 py-3">
                             <div class="flex flex-wrap gap-2">
