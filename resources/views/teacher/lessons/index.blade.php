@@ -5,8 +5,12 @@
              :action="'<a href=\''.route('teacher.lessons.create').'\' class=\'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium\'><i class=\'bi bi-plus-lg\'></i> درس جديد</a>'"
      />
 
-     <div class="mb-4">
+     <div class="mb-4 flex items-center gap-4">
          <a href="{{ route('teacher.lessons.recycle-bin') }}" class="text-gray-600 hover:underline">سلة المحذوفات - الدروس</a>
+         <!-- Sprint 67: bulk lesson creation -->
+         <a href="{{ route('teacher.lessons.bulk.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+             <i class="bi bi-stack"></i> إنشاء دروس متعددة
+         </a>
      </div>
 
      @if (session('success'))

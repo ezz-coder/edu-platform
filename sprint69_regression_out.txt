@@ -1,0 +1,70 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sprint63StudentReservationsResourcesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mstudent can cancel own reservation and quantity is restored[39m[90m                                                 [39m [90m1.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcancelling unlimited reservation does not change status and notifies once[39m[90m                                   [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent cannot cancel another students reservation[39m[90m                                                          [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid reservation item id returns 404[39m[90m                                                                     [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdelivered reservation cannot be cancelled[39m[90m                                                                   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdouble cancel is rejected without duplicate notification[39m[90m                                                    [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent can re reserve after cancelling[39m[90m                                                                     [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90msearch by title matches only matching resources[39m[90m                                                             [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90msearch with non matching query returns empty results[39m[90m                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mempty query shows all visible resources[39m[90m                                                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfilter by type[39m[90m                                                                                              [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfilter by publish date range[39m[90m                                                                                [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfilters do not expose invisible or untargeted resources[39m[90m                                                     [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdirect download of allowed file resource[39m[90m                                                                    [39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdownload denied for invisible resource[39m[90m                                                                      [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdownload denied for expired resource[39m[90m                                                                        [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdownload denied for untargeted resource[39m[90m                                                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnon file resource is not treated as downloadable[39m[90m                                                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mguest cannot access download[39m[90m                                                                                [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sprint65StudentNotificationsAccountTest[39m
+  [32;1m✓[39;22m[90m [39m[90mteacher creating lesson notifies targeted students only[39m[90m                                                     [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant creating lesson notifies students of teachers group[39m[90m                                               [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher editing grade notifies only affected student[39m[90m                                                        [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant editing grade notifies student and keeps teacher notification[39m[90m                                     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90msettings page loads for student[39m[90m                                                                             [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent can change mobile validly and it persists[39m[90m                                                           [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid mobile is rejected[39m[90m                                                                                  [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mduplicate mobile owned by other family is rejected[39m[90m                                                          [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmobile change updates all sibling accounts and switching still works[39m[90m                                        [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mgrades page shows own grades only[39m[90m                                                                           [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mgrades page orders latest first and excludes unfinished[39m[90m                                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mattendance page shows own records with correct totals[39m[90m                                                       [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mattendance page counts late and absent[39m[90m                                                                      [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mguest cannot access new pages[39m[90m                                                                               [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sprint68CommunicationParent2FATest[39m
+  [32;1m✓[39;22m[90m [39m[90mteacher can send message to enrolled student[39m[90m                                                                [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent receives message and notification[39m[90m                                                                   [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mread unread state works[39m[90m                                                                                    [39m [90m13.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent cannot access other students thread[39m[90m                                                                 [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher cannot message student of another teacher[39m[90m                                                           [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mguest and assistant cannot access messaging[39m[90m                                                                 [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher creates announcement with targets[39m[90m                                                                   [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtargeted students see announcement others do not[39m[90m                                                            [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mannouncement edit and delete by owner only[39m[90m                                                                  [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mannouncement produces notifications for targeted students[39m[90m                                                   [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher cannot target groups he does not own[39m[90m                                                                [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent can register and is linked to children[39m[90m                                                               [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent registration requires linked student[39m[90m                                                                 [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent can login and view child data[39m[90m                                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mwrong parent credentials rejected[39m[90m                                                                           [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent cannot view unrelated student[39m[90m                                                                        [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent cannot access teacher or assistant areas[39m[90m                                                             [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent views are read only[39m[90m                                                                                  [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher can enable 2fa with password[39m[90m                                                                        [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90menable requires correct password[39m[90m                                                                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlogin with 2fa issues otp challenge[39m[90m                                                                         [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcorrect otp completes login[39m[90m                                                                                 [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mwrong otp rejected[39m[90m                                                                                          [39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchallenge requires pending session[39m[90m                                                                          [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdisable 2fa restores normal login[39m[90m                                                                           [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent login is not affected by 2fa[39m[90m                                                                        [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnon teachers cannot toggle 2fa routes[39m[90m                                                                       [39m [90m0.07s[39m  
+
+  [90mTests:[39m    [32;1m60 passed[39;22m[90m (200 assertions)[39m
+  [90mDuration:[39m [39m25.61s[39m
+

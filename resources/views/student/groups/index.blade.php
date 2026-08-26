@@ -6,6 +6,32 @@
             <p class="mt-2 text-gray-600">تصفح المجموعات الدراسية المتاحة حالياً</p>
         </div>
 
+        <!-- Sprint 69: Stage & Gender filters -->
+        <form method="GET" action="{{ route('student.groups.index') }}" class="card p-4 grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+            <div>
+                <label class="block text-xs text-text-muted mb-1">المرحلة الدراسية</label>
+                <select name="stage" class="w-full rounded-lg border-gray-300 text-sm">
+                    <option value="">كل المراحل</option>
+                    @foreach ($stages as $s)
+                        <option value="{{ $s }}" {{ $filterStage === $s ? 'selected' : '' }}>{{ $s }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs text-text-muted mb-1">النوع</label>
+                <select name="gender" class="w-full rounded-lg border-gray-300 text-sm">
+                    <option value="">الكل</option>
+                    @foreach (['boys' => 'بنين', 'girls' => 'بنات', 'mixed' => 'مشترك'] as $g => $label)
+                        <option value="{{ $g }}" {{ $filterGender === $g ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex gap-2 md:col-span-2">
+                <button type="submit" class="btn-primary btn-sm flex-1">فلترة</button>
+                <a href="{{ route('student.groups.index') }}" class="btn-secondary btn-sm">مسح</a>
+            </div>
+        </form>
+
         <!-- Groups Grid -->
         @if ($groups->isEmpty())
             <div class="bg-white rounded-lg shadow-sm p-12 text-center">

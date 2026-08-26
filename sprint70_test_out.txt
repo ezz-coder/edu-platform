@@ -1,0 +1,465 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sprint70FinalRuntimeSecurityQaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mterm end execute then undo rolls back state[39m[90m                                                                 [39m [90m1.44s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mterm undo is blocked after new work started[39m[90m                                                                 [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdrag and drop reorder persists after refresh[39m[90m                                                                [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreorder cannot touch other teachers lessons[39m[90m                                                                 [39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mreset attempt deletes attempt and allows retake[39m[90m                                                             [39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mexam archive restore within 7 days force delete only after[39m[90m                                                  [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent sees only targeted visible exam[39m[90m                                                                     [39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mfull student exam flow single attempt autosave submit grade notify[39m[90m                                          [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent leave cancels attempt and blocks reentry[39m[90m                                                            [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreview respects allow review flag[39m[90m                                                                           [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent cannot access another students attempt[39m[90m                                                              [39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mstudent resource visibility targeting expiry and scope isolation[39m[90m                                            [39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90massistant reservation full lifecycle with permissions and notifications[39m[90m                                     [39m [90m2.39s[39m  
+  [31;1m⨯[39;22m[90m [39m[90massistant without permission gets 403 immediately[39m[90m                                                           [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant cannot access other assistants teacher data[39m[90m                                                       [39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90massistant qr attendance full cycle[39m[90m                                                                          [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant cannot open session for other teachers group[39m[90m                                                      [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant grade edit notifies teacher and student[39m[90m                                                           [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant without grades permission cannot edit grades[39m[90m                                                      [39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mteacher publishing exam notifies targeted students only[39m[90m                                                     [39m [90m2.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher a cannot access teacher b resources[39m[90m                                                                 [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent notifications are isolated[39m[90m                                                                          [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrole middleware blocks cross role access[39m[90m                                                                    [39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mlogin redirects by role and logout works[39m[90m                                                                    [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant login logout flow[39m[90m                                                                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90minactive assistant cannot login[39m[90m                                                                             [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mauth entry page accessible for guests[39m[90m                                                                       [39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90msmoke teacher main pages[39m[90m                                                                                    [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90msmoke assistant main pages[39m[90m                                                                                  [39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90msmoke student main pages[39m[90m                                                                                    [39m [90m0.30s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m term undo is blocked after new work started               
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m198[39m
+    194▕         ]);
+    195▕ 
+    196▕         $response = $this->post(route('teacher.term.undo'));
+    197▕         $response->assertRedirect();
+  ➜ 198▕         $this->assertTrue(session('error') !== null || $response->getSession()->get('error') !== null);
+    199▕ 
+    200▕         // State NOT rolled back
+    201▕         $this->assertEquals('archived', $this->termA->fresh()->status);
+    202▕         $this->assertNotNull(TermRollback::find($rollback->id));
+
+  [33m1   [39m[39;1mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39;22m:[39;1m198[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m reset attempt deletes attempt and allows retake           
+[39;1m  Failed asserting that any soft deleted row in the table [exam_attempts] matches the attributes {"id":1}.
+
+The table is empty.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m257[39m
+    253▕         $this->actingAs($this->teacherA)
+    254▕             ->post(route('teacher.exams.attempt.reset', $attempt))
+    255▕             ->assertRedirect();
+    256▕ 
+  ➜ 257▕         $this->assertSoftDeleted('exam_attempts', ['id' => $attempt->id]);
+    258▕         $this->assertDatabaseMissing('exam_answers', ['attempt_id' => $attempt->id]);
+    259▕ 
+    260▕         // Student can start again (firstOrCreate sees only non-trashed)
+    261▕         $resp = $this->asStudent($this->studentA)->post(route('student.exams.start', $exam));
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m exam archive restore within 7 days force delete only a…   
+[39;1m  Expected response status code [201, 301, 302, 303, 307, 308] but received 404.
+Failed asserting that false is true.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m278[39m
+    274▕         $this->assertSoftDeleted('exams', ['id' => $exam->id]);
+    275▕         $this->assertTrue($exam->fresh()->canRestore());
+    276▕ 
+    277▕         // Force delete blocked within 7 days
+  ➜ 278▕         $this->delete(route('teacher.exams.force-delete', $exam))->assertRedirect();
+    279▕         $this->assertSoftDeleted('exams', ['id' => $exam->id]); // still exists
+    280▕ 
+    281▕         // Restore works within window
+    282▕         $this->post(route('teacher.exams.restore', $exam))->assertRedirect();
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m full student exam flow single…  [41;1m RouteNotFoundException [49;22m  
+[39;1m  Route [student.exams.auto-save] not defined.[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php[39m:[32m546[39m
+    542▕             ! is_null($url = call_user_func($this->missingNamedRouteResolver, $name, $parameters, $absolute))) {
+    543▕             return $url;
+    544▕         }
+    545▕ 
+  ➜ 546▕         throw new RouteNotFoundException("Route [{$name}] not defined.");
+    547▕     }
+    548▕ 
+    549▕     /**
+    550▕      * Get the URL for a given route instance.
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php[39;22m:[39;1m546[39;22m
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Foundation\helpers.php[39;22m:[39;1m870[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m student resource visibility targeting expiry and scope…   
+[39;1m  Expected response status code [404] but received 403.
+Failed asserting that 403 is identical to 404.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m459[39m
+    455▕         $this->assertStringNotContainsString('TEACHER-B-RES', $html);
+    456▕ 
+    457▕         // Direct URL access to out-of-scope resource must be denied
+    458▕         $this->asStudent($this->studentA)->get(route('student.resources.show', $otherGroupRes))
+  ➜ 459▕             ->assertNotFound();
+    460▕         $this->asStudent($this->studentA)->get(route('student.resources.show', $otherTeacherRes))
+    461▕             ->assertNotFound();
+    462▕     }
+    463▕
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m assistant reservation full lifecycle with permissions…    
+[39;1m  Expected response status code [201, 301, 302, 303, 307, 308] but received 500.
+Failed asserting that false is true.
+
+The following exception occurred during the last request:
+
+BadMethodCallException: Call to undefined method App\Models\User::isActive() in C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+Stack trace:
+#0 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php(36): Illuminate\Database\Eloquent\Model::throwBadMethodCallException('isActive')
+#1 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(2809): Illuminate\Database\Eloquent\Model->forwardCallTo(Object(Illuminate\Database\Eloquent\Builder), 'isActive', Array)
+#2 C:\laragon\www\edu-platform\app\Http\Middleware\AssistantMiddleware.php(27): Illuminate\Database\Eloquent\Model->__call('isActive', Array)
+#3 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): App\Http\Middleware\AssistantMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#4 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#5 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#6 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestForgery.php(104): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#7 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestForgery->handle(Object(Illuminate\Http\Request), Object(Closure))
+#8 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\View\Middleware\ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#9 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#10 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(120): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#11 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest(Object(Illuminate\Http\Request), Object(Illuminate\Session\Store), Object(Closure))
+#12 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#13 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#14 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Illuminate\Http\Request), Object(Closure))
+#15 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#16 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#18 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#19 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#20 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#21 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#22 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#23 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#24 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#25 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#26 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#28 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#29 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#30 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#31 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#32 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#33 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#34 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(61): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#35 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#36 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#37 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#38 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#39 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#40 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#41 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#42 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#43 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#44 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#45 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#46 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(397): Illuminate\Foundation\Testing\TestCase->call('POST', 'http://localhos...', Array, Array, Array, Array)
+#47 C:\laragon\www\edu-platform\tests\Feature\Sprint70FinalRuntimeSecurityQaTest.php(501): Illuminate\Foundation\Testing\TestCase->post('http://localhos...')
+#48 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(1318): Tests\Feature\Sprint70FinalRuntimeSecurityQaTest->test_assistant_reservation_full_lifecycle_with_permissions_and_notifications()
+#49 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('test_assistant_...', Array)
+#50 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#51 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#52 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(Tests\Feature\Sprint70FinalRuntimeSecurityQaTest))
+#53 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#54 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#55 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\TextUI\Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#56 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application->run(Array)
+#57 {main}
+
+----------------------------------------------------------------------------------
+
+Call to undefined method App\Models\User::isActive()[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m501[39m
+    497▕         $this->assertNotNull($item);
+    498▕         $this->assertEquals('pending', $item->delivery_status ?? 'pending');
+    499▕ 
+    500▕         // Delivery tracking + undo
+  ➜ 501▕         $this->post(route('assistant.reservations.items.deliver', [$reservation, $item]))->assertRedirect();
+    502▕         $this->assertEquals('delivered', $item->fresh()->delivery_status);
+    503▕         $this->post(route('assistant.reservations.items.undo-deliver', [$reservation, $item]))->assertRedirect();
+    504▕         $this->assertEquals('pending', $item->fresh()->delivery_status);
+    505▕
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m assistant without permission gets 403 immediately         
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m531[39m
+    527▕ 
+    528▕         // Grant then verify access appears immediately; revoke then 403 again
+    529▕         $this->assistantA->permissions()->update(['can_manage_reservations' => true]);
+    530▕         $this->actingAs($this->assistantA, 'assistant')
+  ➜ 531▕             ->get(route('assistant.reservations.index'))->assertOk();
+    532▕ 
+    533▕         $this->assistantA->permissions()->update(['can_manage_reservations' => false]);
+    534▕         $this->actingAs($this->assistantA, 'assistant')
+    535▕             ->get(route('assistant.reservations.index'))->assertForbidden();
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m assistant qr attendance full cycle                        
+[39;1m  Failed asserting that a row in the table [attendance_records] matches the attributes {
+    "attendance_session_id": 1,
+    "student_id": 3,
+    "attendance_type": "present"
+}.
+
+The table is empty.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m582[39m
+    578▕         // Valid token accepted
+    579▕         $this->post(route('assistant.attendance.scan', $session), [
+    580▕             'student_code' => $this->studentA->student_code, 'qr_token' => $enrollment->qr_token,
+    581▕         ])->assertRedirect();
+  ➜ 582▕         $this->assertDatabaseHas('attendance_records', [
+    583▕             'attendance_session_id' => $session->id, 'student_id' => $this->studentA->id,
+    584▕             'attendance_type' => 'present',
+    585▕         ]);
+    586▕
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m teacher publishing exam notifies targeted students onl…   
+[39;1m  Expected response status code [201, 301, 302, 303, 307, 308] but received 500.
+Failed asserting that false is true.
+
+The following exception occurred during the last request:
+
+PDOException: SQLSTATE[HY000]: General error: 1 ambiguous column name: id in C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+Stack trace:
+#0 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php(435): PDO->prepare('select "id" fro...')
+#1 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php(846): Illuminate\Database\Connection->Illuminate\Database\{closure}('select "id" fro...', Array)
+#2 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php(813): Illuminate\Database\Connection->runQueryCallback('select "id" fro...', Array, Object(Closure))
+#3 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php(426): Illuminate\Database\Connection->run('select "id" fro...', Array, Object(Closure))
+#4 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3573): Illuminate\Database\Connection->select('select "id" fro...', Array, true, Array)
+#5 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3833): Illuminate\Database\Query\Builder->runSelect()
+#6 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(1088): Illuminate\Database\Query\Builder->pluck('id', NULL)
+#7 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php(23): Illuminate\Database\Eloquent\Builder->pluck('id')
+#8 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php(52): Illuminate\Database\Eloquent\Relations\Relation->forwardCallTo(Object(Illuminate\Database\Eloquent\Builder), 'pluck', Array)
+#9 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Relations\Relation.php(538): Illuminate\Database\Eloquent\Relations\Relation->forwardDecoratedCallTo(Object(Illuminate\Database\Eloquent\Builder), 'pluck', Array)
+#10 C:\laragon\www\edu-platform\app\Http\Controllers\TeacherExamController.php(198): Illuminate\Database\Eloquent\Relations\Relation->__call('pluck', Array)
+#11 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(46): App\Http\Controllers\TeacherExamController->publish(Object(App\Models\Exam))
+#12 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Route.php(275): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\TeacherExamController), 'publish')
+#13 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Route.php(215): Illuminate\Routing\Route->runController()
+#14 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(822): Illuminate\Routing\Route->run()
+#15 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 C:\laragon\www\edu-platform\app\Http\Middleware\RoleMiddleware.php(24): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#17 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): App\Http\Middleware\RoleMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure), 'teacher')
+#18 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#19 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#20 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Auth\Middleware\Authenticate.php(63): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#21 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Auth\Middleware\Authenticate->handle(Object(Illuminate\Http\Request), Object(Closure))
+#22 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestForgery.php(104): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestForgery->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\View\Middleware\ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#25 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#26 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(120): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#27 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest(Object(Illuminate\Http\Request), Object(Illuminate\Session\Store), Object(Closure))
+#28 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#29 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#30 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#32 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#33 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#34 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#35 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#36 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#37 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#38 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#39 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#40 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#41 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#42 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#43 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#44 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#45 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#46 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#47 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#48 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#49 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#50 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(61): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#51 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#52 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#53 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#54 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#55 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#56 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#57 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#58 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#59 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#60 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#61 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#62 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(397): Illuminate\Foundation\Testing\TestCase->call('POST', 'http://localhos...', Array, Array, Array, Array)
+#63 C:\laragon\www\edu-platform\tests\Feature\Sprint70FinalRuntimeSecurityQaTest.php(679): Illuminate\Foundation\Testing\TestCase->post('http://localhos...')
+#64 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(1318): Tests\Feature\Sprint70FinalRuntimeSecurityQaTest->test_teacher_publishing_exam_notifies_targeted_students_only()
+#65 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('test_teacher_pu...', Array)
+#66 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#67 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#68 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(Tests\Feature\Sprint70FinalRuntimeSecurityQaTest))
+#69 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#70 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#71 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\TextUI\Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#72 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application->run(Array)
+#73 {main}
+
+Next Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 ambiguous column name: id (Connection: sqlite, Database: :memory:, SQL: select "id" from "study_groups" inner join "exam_groups" on "study_groups"."id" = "exam_groups"."group_id" where "exam_groups"."exam_id" = 1) in C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+Stack trace:
+#0 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php(813): Illuminate\Database\Connection->runQueryCallback('select "id" fro...', Array, Object(Closure))
+#1 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php(426): Illuminate\Database\Connection->run('select "id" fro...', Array, Object(Closure))
+#2 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3573): Illuminate\Database\Connection->select('select "id" fro...', Array, true, Array)
+#3 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3833): Illuminate\Database\Query\Builder->runSelect()
+#4 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(1088): Illuminate\Database\Query\Builder->pluck('id', NULL)
+#5 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php(23): Illuminate\Database\Eloquent\Builder->pluck('id')
+#6 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php(52): Illuminate\Database\Eloquent\Relations\Relation->forwardCallTo(Object(Illuminate\Database\Eloquent\Builder), 'pluck', Array)
+#7 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Relations\Relation.php(538): Illuminate\Database\Eloquent\Relations\Relation->forwardDecoratedCallTo(Object(Illuminate\Database\Eloquent\Builder), 'pluck', Array)
+#8 C:\laragon\www\edu-platform\app\Http\Controllers\TeacherExamController.php(198): Illuminate\Database\Eloquent\Relations\Relation->__call('pluck', Array)
+#9 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(46): App\Http\Controllers\TeacherExamController->publish(Object(App\Models\Exam))
+#10 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Route.php(275): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\TeacherExamController), 'publish')
+#11 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Route.php(215): Illuminate\Routing\Route->runController()
+#12 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(822): Illuminate\Routing\Route->run()
+#13 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#14 C:\laragon\www\edu-platform\app\Http\Middleware\RoleMiddleware.php(24): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): App\Http\Middleware\RoleMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure), 'teacher')
+#16 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#17 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#18 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Auth\Middleware\Authenticate.php(63): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#19 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Auth\Middleware\Authenticate->handle(Object(Illuminate\Http\Request), Object(Closure))
+#20 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestForgery.php(104): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#21 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestForgery->handle(Object(Illuminate\Http\Request), Object(Closure))
+#22 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\View\Middleware\ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(120): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#25 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest(Object(Illuminate\Http\Request), Object(Illuminate\Session\Store), Object(Closure))
+#26 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#28 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Illuminate\Http\Request), Object(Closure))
+#29 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Cookie\Middleware\EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#30 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#32 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#33 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#34 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#35 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#36 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#37 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#38 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#39 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#40 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#41 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#42 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#43 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#44 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#45 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#46 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#47 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#48 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(61): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#49 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#50 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#51 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#52 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#53 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#54 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#55 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#56 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#57 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#58 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#59 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#60 C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(397): Illuminate\Foundation\Testing\TestCase->call('POST', 'http://localhos...', Array, Array, Array, Array)
+#61 C:\laragon\www\edu-platform\tests\Feature\Sprint70FinalRuntimeSecurityQaTest.php(679): Illuminate\Foundation\Testing\TestCase->post('http://localhos...')
+#62 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(1318): Tests\Feature\Sprint70FinalRuntimeSecurityQaTest->test_teacher_publishing_exam_notifies_targeted_students_only()
+#63 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('test_teacher_pu...', Array)
+#64 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#65 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#66 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(Tests\Feature\Sprint70FinalRuntimeSecurityQaTest))
+#67 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\Framework\TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#68 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#69 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\src\TextUI\Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#70 C:\laragon\www\edu-platform\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application->run(Array)
+#71 {main}
+
+----------------------------------------------------------------------------------
+
+SQLSTATE[HY000]: General error: 1 ambiguous column name: id (Connection: sqlite, Database: :memory:, SQL: select "id" from "study_groups" inner join "exam_groups" on "study_groups"."id" = "exam_groups"."group_id" where "exam_groups"."exam_id" = 1)[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m679[39m
+    675▕     public function test_teacher_publishing_exam_notifies_targeted_students_only(): void
+    676▕     {
+    677▕         $exam = $this->makeExam($this->teacherA, [$this->groupA1], 'draft');
+    678▕ 
+  ➜ 679▕         $this->actingAs($this->teacherA)->post(route('teacher.exams.publish', $exam))->assertRedirect();
+    680▕ 
+    681▕         $this->assertTrue(Notification::where('student_id', $this->studentA->id)
+    682▕             ->where('type', 'exam')->exists());
+    683▕         // studentB (different teacher/group) gets nothing
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m login redirects by role and logout works         [41;1m Error [49;22m  
+[39;1m  Call to a member function all() on array[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m729[39m
+    725▕     public function test_login_redirects_by_role_and_logout_works(): void
+    726▕     {
+    727▕         // Teacher login
+    728▕         $this->post('/login', ['email' => 'ta@test.local', 'password' => 'password'])
+  ➜ 729▕             ->assertRedirect(route('teacher.dashboard'));
+    730▕ 
+    731▕         // Student login
+    732▕         $this->post('/login', ['email' => strtolower(str_replace(' ', '', 'Student A')) . '@test.local', 'password' => 'password'])
+    733▕             ->assertRedirect(route('student.dashboard'));
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m smoke teacher main pages        [41;1m RouteNotFoundException [49;22m  
+[39;1m  Route [teacher.notifications.index] not defined.[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php[39m:[32m546[39m
+    542▕             ! is_null($url = call_user_func($this->missingNamedRouteResolver, $name, $parameters, $absolute))) {
+    543▕             return $url;
+    544▕         }
+    545▕ 
+  ➜ 546▕         throw new RouteNotFoundException("Route [{$name}] not defined.");
+    547▕     }
+    548▕ 
+    549▕     /**
+    550▕      * Get the URL for a given route instance.
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php[39;22m:[39;1m546[39;22m
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Foundation\helpers.php[39;22m:[39;1m870[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m smoke student main pages        [41;1m RouteNotFoundException [49;22m  
+[39;1m  Route [student.notifications.index] not defined.[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php[39m:[32m546[39m
+    542▕             ! is_null($url = call_user_func($this->missingNamedRouteResolver, $name, $parameters, $absolute))) {
+    543▕             return $url;
+    544▕         }
+    545▕ 
+  ➜ 546▕         throw new RouteNotFoundException("Route [{$name}] not defined.");
+    547▕     }
+    548▕ 
+    549▕     /**
+    550▕      * Get the URL for a given route instance.
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php[39;22m:[39;1m546[39;22m
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Foundation\helpers.php[39;22m:[39;1m870[39;22m
+
+
+  [90mTests:[39m    [31;1m12 failed[39;22m[90m,[39m[39m [39m[32;1m18 passed[39;22m[90m (134 assertions)[39m
+  [90mDuration:[39m [39m10.81s[39m
+

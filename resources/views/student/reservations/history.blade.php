@@ -24,7 +24,9 @@
                         </div>
                         <div>
                             <p class="text-gray-500">حالة التسليم</p>
-                            @if($item->isDelivered())
+                            @if($item->isCancelled())
+                                <span class="text-red-600 font-medium">ملغي</span>
+                            @elseif($item->isDelivered())
                                 <span class="text-green-700 font-medium">تم التسليم</span>
                             @else
                                 <span class="text-orange-600 font-medium">انتظار التسليم</span>
@@ -41,6 +43,17 @@
                             @endif
                         </div>
                     </div>
+
+                    {{-- Sprint 63: cancel a pending reservation from history --}}
+                    @if($item->isPending() && $item->reservation->isOpen())
+                        <form method="POST" action="{{ route('student.reservations.cancel', $item) }}" class="mt-3"
+                              onsubmit="return confirm('هل أنت متأكد من إلغاء الحجز؟');">
+                            @csrf
+                            <button type="submit" class="text-sm text-red-600 hover:text-red-700 font-medium">
+                                <i class="bi bi-x-circle"></i> إلغاء الحجز
+                            </button>
+                        </form>
+                    @endif
                 </div>
             @empty
                 <div class="bg-white rounded-lg shadow-sm p-6 text-center">
@@ -49,6 +62,8 @@
             @endforelse
         </div>
 
-        {{ $history->links() }}
+        @if($history instanceof \Illuminate\Pagination\LengthAwarePaginator)
+            {{ $history->links() }}
+        @endif
     </div>
 </x-dashboard-layout>

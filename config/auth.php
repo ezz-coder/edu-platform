@@ -46,6 +46,11 @@ return [
             'driver' => 'session',
             'provider' => 'assistants',
         ],
+        // Sprint 68 — Parent accounts (read-only access to their children).
+        'parent' => [
+            'driver' => 'session',
+            'provider' => 'parents',
+        ],
     ],
 
     /*
@@ -74,6 +79,11 @@ return [
         'assistants' => [
             'driver' => 'eloquent',
             'model' => \App\Models\Assistant::class,
+        ],
+
+        'parents' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\ParentAccount::class,
         ],
 
         // 'users' => [

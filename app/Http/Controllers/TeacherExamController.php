@@ -195,7 +195,7 @@ class TeacherExamController extends Controller
         $exam->update(['status' => 'visible']);
 
         // Notify targeted students
-        $groupIds = $exam->targetGroups()->pluck('id')->toArray();
+        $groupIds = $exam->targetGroups()->pluck('study_groups.id')->toArray();
         if (! empty($groupIds)) {
             $studentIds = NotificationHelper::groupStudentIds($groupIds);
             NotificationHelper::notifyStudents(
@@ -220,7 +220,7 @@ class TeacherExamController extends Controller
         $exam->update(['status' => 'hidden']);
 
         // Notify targeted students
-        $groupIds = $exam->targetGroups()->pluck('id')->toArray();
+        $groupIds = $exam->targetGroups()->pluck('study_groups.id')->toArray();
         if (! empty($groupIds)) {
             $studentIds = NotificationHelper::groupStudentIds($groupIds);
             NotificationHelper::notifyStudents(

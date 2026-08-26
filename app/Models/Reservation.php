@@ -118,9 +118,13 @@ class Reservation extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Active (non-cancelled) reservations count towards the quantity.
+     * Sprint 63: cancelled items are excluded so quantity is restored.
+     */
     public function reservedCount(): int
     {
-        return $this->items()->count();
+        return $this->items()->where('delivery_status', '!=', 'cancelled')->count();
     }
 
     public function deliveredCount(): int

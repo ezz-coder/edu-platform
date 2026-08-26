@@ -720,3 +720,31 @@
 - المدرس يمتلك نسخة احتياطية خاصة ببياناته فقط
 - تشمل: المجموعات، الطلاب، الحضور، الدروس، المصادر، الامتحانات، الحجوزات، المساعدين
 - لا يمكن لمدرس الوصول لنسخة احتياطية لمدرس آخر
+
+---
+
+# SPRINT 71 FINAL SIGN-OFF UPDATE (2026-08-26)
+
+هذا القسم يحدّث حالة المواصفة لتطابق الحالة النهائية للإصدار BAYAN v1.0.0.
+القسم 18 أعلاه ("Missing Features") كان مكتوباً قبل Sprints 61–68 وهو الآن قديم. الحالة النهائية:
+
+| Feature سابقة "Missing" | الحالة النهائية | الدليل |
+|---|---|---|
+| Grades Module (`TeacherGradeController`) | COMPLETE — RUNTIME VERIFIED | Sprint 61/70 |
+| Reports Module (`TeacherReportController` + export) | COMPLETE — RUNTIME VERIFIED | Sprint 66 |
+| Teacher Settings (`TeacherSettingsController`) | COMPLETE — RUNTIME VERIFIED | Sprint 67 |
+| Import Students (Excel/Xlsx) | COMPLETE — RUNTIME VERIFIED | Sprint 66 |
+| Export Data | COMPLETE — RUNTIME VERIFIED | Sprint 66 |
+| Bulk Create Lessons | COMPLETE — RUNTIME VERIFIED | Sprint 67 |
+| Teacher Calendar | COMPLETE — RUNTIME VERIFIED | Sprint 67 |
+| Student Progress Tracking (`TeacherProgressController`) | COMPLETE — RUNTIME VERIFIED | Sprint 67 |
+| Messaging System (teacher↔student) | COMPLETE — RUNTIME VERIFIED | Sprint 68 |
+| Announcements | COMPLETE — RUNTIME VERIFIED | Sprint 68 |
+| Parent Access (read-only dashboard) | COMPLETE — RUNTIME VERIFIED | Sprints 68/70 |
+| Two-Factor Authentication (email OTP) | COMPLETE — RUNTIME VERIFIED | Sprint 68 |
+
+ملاحظات:
+- Password Reset for Teacher / Email Verification: تبقى خارج النطاق النهائي المعتمد (قرار تصميمي موثق — الدخول بالموبايل).
+- Advanced Search: منفذ ضمن Sprint 67 (بحث الطلاب والموارد).
+- جميع قواعد الأعمال في القسم 17 مطبقة ومُختبرة (Sprints 61–70 suites + Sprint 70 runtime/security QA: 31/31 PASS).
+- لا توجد Regression معروفة تمنع الاستخدام.

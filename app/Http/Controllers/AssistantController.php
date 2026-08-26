@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\AttendanceRecord;
 use App\Models\AttendanceSession;
 use App\Models\Exam;
+use App\Models\ExamAttempt;
 use App\Models\ExamQuestion;
 use App\Models\GroupEnrollment;
 use App\Models\Lesson;
@@ -350,7 +351,7 @@ class AssistantController extends Controller
         $exam->update(['status' => 'visible']);
 
         // Notify targeted students
-        $groupIds = $exam->targetGroups()->pluck('id')->toArray();
+        $groupIds = $exam->targetGroups()->pluck('study_groups.id')->toArray();
         if (! empty($groupIds)) {
             $studentIds = NotificationHelper::groupStudentIds($groupIds);
             NotificationHelper::notifyStudents(
@@ -386,7 +387,7 @@ class AssistantController extends Controller
         $exam->update(['status' => 'hidden']);
 
         // Notify targeted students
-        $groupIds = $exam->targetGroups()->pluck('id')->toArray();
+        $groupIds = $exam->targetGroups()->pluck('study_groups.id')->toArray();
         if (! empty($groupIds)) {
             $studentIds = NotificationHelper::groupStudentIds($groupIds);
             NotificationHelper::notifyStudents(
@@ -978,7 +979,7 @@ class AssistantController extends Controller
 
         // The student must belong to this group.
         $enrollment = GroupEnrollment::where('student_id', $validated['student_id'])
-            ->where('group_id', $session->group_id)
+            ->where('group_id', $session->study_group_id)
             ->where('status', 'enrolled')
             ->first();
 
@@ -989,7 +990,7 @@ class AssistantController extends Controller
         $record = AttendanceRecord::firstOrNew([
             'attendance_session_id' => $session->id,
             'student_id' => $validated['student_id'],
-            'group_id' => $session->group_id,
+            'group_id' => $session->study_group_id,
         ]);
 
         if ($validated['status'] === 'absent') {
@@ -1030,7 +1031,7 @@ class AssistantController extends Controller
 
         foreach ($absentStudentIds as $studentId) {
             $enrollment = GroupEnrollment::where('student_id', $studentId)
-                ->where('group_id', $session->group_id)
+                ->where('group_id', $session->study_group_id)
                 ->where('status', 'enrolled')
                 ->first();
 
@@ -1039,7 +1040,7 @@ class AssistantController extends Controller
             }
 
             $history = AttendanceRecord::where('student_id', $studentId)
-                ->where('group_id', $session->group_id)
+                ->where('group_id', $session->study_group_id)
                 ->whereHas('session', fn ($q) => $q->where('teacher_id', $this->teacherId()))
                 ->with('session')
                 ->get()
@@ -2042,6 +2043,16 @@ class AssistantController extends Controller
 
         TeacherActivity::log($this->teacherId(), 'lesson_created', 'إنشاء درس', "تم إنشاء درس {$lesson->title} (بواسطة مساعد)");
 
+        // Sprint 65: notify enrolled students of this group about the new lesson.
+        NotificationHelper::notifyStudents(
+            $this->teacherId(),
+            NotificationHelper::groupStudentIds([$lesson->group_id]),
+            'lesson',
+            'درس جديد',
+            "تم إضافة درس جديد: {$lesson->title}",
+            route('student.resources.home')
+        );
+
         return redirect()->route('assistant.lessons.index')->with('success', 'تم إنشاء الدرس بنجاح');
     }
 
@@ -2234,6 +2245,126 @@ class AssistantController extends Controller
         TeacherActivity::log($this->teacherId(), 'lesson_permanent_deleted', 'حذف نهائي درس', "تم حذف درس {$lesson->title} نهائياً (بواسطة مساعد)");
 
         return back()->with('success', 'تم الحذف النهائي بنجاح');
+    }
+
+    /* ============================================================= */
+    /* GRADES (can_manage_grades)                                   */
+    /* ============================================================= */
+
+    public function gradesIndex(): View
+    {
+        $exams = Exam::where('teacher_id', $this->teacherId())
+            ->withCount(['attempts as finished_attempts' => fn ($q) => $q->where('status', 'finished')])
+            ->withCount(['attempts as total_attempts'])
+            ->latest()
+            ->paginate(15);
+
+        return view('assistant.grades.index', [
+            'header' => 'الدرجات',
+            'exams' => $exams,
+        ]);
+    }
+
+    public function gradesShow(Request $request, Exam $exam): View
+    {
+        $this->authorizeExam($exam);
+
+        $groups = StudyGroup::where('teacher_id', $this->teacherId())->orderBy('title')->get();
+
+        $targetGroupIds = $exam->targetGroups()->pluck('group_id');
+        $targetedStudentIds = GroupEnrollment::whereIn('group_id', $targetGroupIds)
+            ->where('status', 'enrolled')
+            ->distinct('student_id')
+            ->pluck('student_id');
+
+        $query = ExamAttempt::where('exam_id', $exam->id)
+            ->where('status', 'finished')
+            ->with(['student', 'student.enrollments' => fn ($q) => $q->where('status', 'enrolled')->whereIn('group_id', $targetGroupIds)]);
+
+        if ($search = $request->input('search')) {
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('student_code', 'like', "%{$search}%")
+                    ->orWhere('mobile', 'like', "%{$search}%");
+            });
+        }
+
+        if ($groupId = $request->input('group_id')) {
+            $query->whereHas('student', fn ($q) => $q->whereHas('enrollments', fn ($q2) => $q2->where('group_id', $groupId)->where('status', 'enrolled')));
+        }
+
+        $attempts = $query->orderByDesc('finished_at')->paginate(20)->withQueryString();
+
+        $stats = [
+            'targeted' => $targetedStudentIds->count(),
+            'graded' => ExamAttempt::where('exam_id', $exam->id)->where('status', 'finished')->count(),
+            'avg' => ExamAttempt::where('exam_id', $exam->id)->where('status', 'finished')->avg('score'),
+            'max' => ExamAttempt::where('exam_id', $exam->id)->where('status', 'finished')->max('score'),
+        ];
+
+        return view('assistant.grades.show', [
+            'header' => $exam->title,
+            'exam' => $exam,
+            'groups' => $groups,
+            'attempts' => $attempts,
+            'stats' => $stats,
+            'filters' => [
+                'search' => $request->input('search'),
+                'group_id' => $request->input('group_id'),
+            ],
+        ]);
+    }
+
+    public function gradesUpdate(Request $request, ExamAttempt $attempt): RedirectResponse
+    {
+        $this->authorizeExam($attempt->exam);
+
+        $validated = $request->validate([
+            'score' => ['required', 'integer', 'min:0', 'max:' . ($attempt->total_marks ?: 100)],
+        ]);
+
+        $attempt->update([
+            'score' => $validated['score'],
+        ]);
+
+        // Sprint 65: notify only the affected student that his grade was edited.
+        NotificationHelper::notifyStudents(
+            $this->teacherId(),
+            [$attempt->student_id],
+            'grade_updated',
+            'تم تعديل درجتك',
+            "تم تعديل درجتك في امتحان {$attempt->exam->title} إلى {$validated['score']}/{$attempt->total_marks}.",
+            route('student.grades')
+        );
+
+        // Notify the teacher when an assistant edits a grade (Source of Truth requirement).
+        NotificationHelper::notifyTeacher(
+            $this->teacherId(),
+            'grade_updated',
+            'تم تعديل درجة بواسطة مساعد',
+            "قام المساعد بتعديل درجة الطالب {$attempt->student->name} في امتحان {$attempt->exam->title} إلى {$validated['score']}/{$attempt->total_marks}.",
+            route('teacher.grades.show', $attempt->exam)
+        );
+
+        ActivityLog::log([
+            'actor_id' => auth('assistant')->id(),
+            'actor_type' => 'assistant',
+            'actor_type_label' => 'مساعد',
+            'action' => 'grade_updated',
+            'category' => 'grade',
+            'description' => "تم تعديل درجة الطالب {$attempt->student->name} في امتحان {$attempt->exam->title} إلى {$validated['score']}/{$attempt->total_marks} (بواسطة مساعد)",
+            'owner_id' => $this->teacherId(),
+            'owner_type' => 'user',
+        ]);
+
+        TeacherActivity::log(
+            $this->teacherId(),
+            'grade_updated',
+            'تعديل درجة',
+            "تم تعديل درجة الطالب {$attempt->student->name} في امتحان {$attempt->exam->title} إلى {$validated['score']}/{$attempt->total_marks} (بواسطة مساعد)"
+        );
+
+        return back()->with('success', 'تم تحديث الدرجة بنجاح.');
     }
 
     /* ============================================================= */

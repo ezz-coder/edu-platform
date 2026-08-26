@@ -1,0 +1,311 @@
+PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.30
+Configuration: C:\laragon\www\edu-platform\phpunit.xml
+
+..[41;37mF[0m...[31;1mE[0m...........[31;1mE[0m......[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m[31;1mE[0m............................  63 / 189 ( 33%)
+............................................................... 126 / 189 ( 66%)
+............................................................... 189 / 189 (100%)
+
+
+Time: 01:16.699, Memory: 78.00 MB
+
+There were 12 errors:
+
+1) Tests\Feature\Auth\EmailVerificationTest::test_email_can_be_verified
+Symfony\Component\Routing\Exception\RouteNotFoundException: Route [dashboard] not defined.
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:546
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:870
+C:\laragon\www\edu-platform\tests\Feature\Auth\EmailVerificationTest.php:41
+
+2) Tests\Feature\Auth\RegistrationTest::test_new_users_can_register
+Symfony\Component\Routing\Exception\RouteNotFoundException: Route [dashboard] not defined.
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:546
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:870
+C:\laragon\www\edu-platform\tests\Feature\Auth\RegistrationTest.php:29
+
+3) Tests\Feature\Sprint30AuditTest::test_public_pages
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+4) Tests\Feature\Sprint30AuditTest::test_admin_login
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+5) Tests\Feature\Sprint30AuditTest::test_teacher_login
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+6) Tests\Feature\Sprint30AuditTest::test_student_login
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+7) Tests\Feature\Sprint30AuditTest::test_admin_pages
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+8) Tests\Feature\Sprint30AuditTest::test_teacher_pages
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+9) Tests\Feature\Sprint30AuditTest::test_student_pages
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+10) Tests\Feature\Sprint30AuditTest::test_assistant_pages
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+11) Tests\Feature\Sprint30AuditTest::test_guest_access_restriction
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+12) Tests\Feature\Sprint30AuditTest::test_logout
+Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+Caused by
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: users
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:846
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:813
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Connection.php:426
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3573
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3557
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:908
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:890
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+C:\laragon\www\edu-platform\tests\Feature\Sprint30AuditTest.php:22
+
+--
+
+There was 1 failure:
+
+1) Tests\Feature\Auth\AuthenticationTest::test_users_can_authenticate_using_the_login_screen
+The user is not authenticated
+Failed asserting that false is true.
+
+C:\laragon\www\edu-platform\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication.php:64
+C:\laragon\www\edu-platform\tests\Feature\Auth\AuthenticationTest.php:29
+
+[37;41mERRORS![0m
+[37;41mTests: 189[0m[37;41m, Assertions: 647[0m[37;41m, Errors: 12[0m[37;41m, Failures: 1[0m[37;41m.[0m

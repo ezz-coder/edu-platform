@@ -21,7 +21,7 @@
         <div class="flex gap-2 mt-2">
             <a href="{{ route('student.resources.show', $resource) }}" class="btn-primary btn-sm">فتح</a>
             @if (in_array($resource->type, ['pdf','image','zip','other']) && $resource->file_path)
-                <a href="{{ asset('storage/' . $resource->file_path) }}" download class="btn-secondary btn-sm">تحميل</a>
+                <a href="{{ route('student.resources.download', $resource) }}" class="btn-secondary btn-sm">تحميل</a>
             @endif
         </div>
     @endif

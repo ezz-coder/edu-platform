@@ -8,6 +8,13 @@
         <div class="alert-success mb-6">{{ session('success') }}</div>
     @endif
 
+    <!-- Sprint 66: bulk import entry point -->
+    <div class="mb-6">
+        <a href="{{ route('teacher.students.import') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+            <i class="bi bi-upload"></i> استيراد طلاب (CSV / Excel)
+        </a>
+    </div>
+
     <!-- Pending Transfer Requests -->
     @if ($transferRequests->isNotEmpty())
         <div class="card border-warning-200 mb-6">
@@ -39,9 +46,10 @@
         </div>
     @endif
 
-    <!-- Search & Filter -->
+    <!-- Sprint 67: Advanced Search & Filter -->
     <div class="card p-6 mb-6">
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <h3 class="text-sm font-bold text-text-primary mb-4"><i class="bi bi-funnel ml-2"></i> بحث متقدم</h3>
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="form-group">
                 <label for="search" class="form-label">بحث</label>
                 <input id="search" name="search" type="text" class="form-input" value="{{ old('search', $filters['search'] ?? '') }}" placeholder="الاسم / الكود / الموبايل">
@@ -64,10 +72,31 @@
                     <option value="removed" {{ ($filters['status'] ?? '') == 'removed' ? 'selected' : '' }}>مزال</option>
                 </select>
             </div>
-            <div class="flex items-end">
-                <button type="submit" class="btn-primary w-full">
+            <div class="form-group">
+                <label for="grade_level" class="form-label">الصف الدراسي</label>
+                <select id="grade_level" name="grade_level" class="form-select">
+                    <option value="">كل الصفوف</option>
+                    @foreach ($groups->pluck('grade_level')->unique()->sort() as $level)
+                        <option value="{{ $level }}" {{ ($filters['grade_level'] ?? '') == $level ? 'selected' : '' }}>{{ $level }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gender_type" class="form-label">نوع الجنس</label>
+                <select id="gender_type" name="gender_type" class="form-select">
+                    <option value="">الكل</option>
+                    <option value="boys" {{ ($filters['gender_type'] ?? '') == 'boys' ? 'selected' : '' }}>ذكور</option>
+                    <option value="girls" {{ ($filters['gender_type'] ?? '') == 'girls' ? 'selected' : '' }}>إناث</option>
+                    <option value="mixed" {{ ($filters['gender_type'] ?? '') == 'mixed' ? 'selected' : '' }}>مختلط</option>
+                </select>
+            </div>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="btn-primary flex-1">
                     <i class="bi bi-search"></i> بحث
                 </button>
+                <a href="{{ route('teacher.students.index') }}" class="btn-ghost">
+                    <i class="bi bi-x-lg"></i> مسح
+                </a>
             </div>
         </form>
     </div>

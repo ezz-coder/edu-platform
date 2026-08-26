@@ -98,6 +98,20 @@ return [
             'hex'   => '#111827',
             'action'=> 'عرض',
         ],
+        'lesson' => [
+            'label' => 'درس',
+            'icon'  => 'bi-journal-bookmark-fill',
+            'color' => 'blue',
+            'hex'   => '#2563eb',
+            'action'=> 'عرض',
+        ],
+        'grade_updated' => [
+            'label' => 'تعديل درجة',
+            'icon'  => 'bi-bar-chart-fill',
+            'color' => 'green',
+            'hex'   => '#16a34a',
+            'action'=> 'عرض',
+        ],
     ],
 
     /**

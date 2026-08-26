@@ -1,0 +1,432 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sprint70FinalRuntimeSecurityQaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mterm end execute then undo rolls back state[39m[90m                                                                [39m [90m18.82s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mterm undo is blocked after new work started[39m[90m                                                                 [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdrag and drop reorder persists after refresh[39m[90m                                                                [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreorder cannot touch other teachers lessons[39m[90m                                                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreset attempt deletes attempt and allows retake[39m[90m                                                             [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexam archive restore within 7 days force delete only after[39m[90m                                                  [39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent sees only targeted visible exam[39m[90m                                                                     [39m [90m0.30s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mfull student exam flow single attempt autosave submit grade notify[39m[90m                                         [39m [90m29.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent leave cancels attempt and blocks reentry[39m[90m                                                            [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreview respects allow review flag[39m[90m                                                                           [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent cannot access another students attempt[39m[90m                                                              [39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mstudent resource visibility targeting expiry and scope isolation[39m[90m                                            [39m [90m0.39s[39m  
+  [31;1m⨯[39;22m[90m [39m[90massistant reservation full lifecycle with permissions and notifications[39m[90m                                     [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant without permission gets 403 immediately[39m[90m                                                           [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant cannot access other assistants teacher data[39m[90m                                                       [39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90massistant qr attendance full cycle[39m[90m                                                                          [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant cannot open session for other teachers group[39m[90m                                                      [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant grade edit notifies teacher and student[39m[90m                                                           [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant without grades permission cannot edit grades[39m[90m                                                      [39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mteacher publishing exam notifies targeted students only[39m[90m                                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher a cannot access teacher b resources[39m[90m                                                                 [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent notifications are isolated[39m[90m                                                                          [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrole middleware blocks cross role access[39m[90m                                                                    [39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mlogin redirects by role and logout works[39m[90m                                                                    [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant login logout flow[39m[90m                                                                                 [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90minactive assistant cannot login[39m[90m                                                                             [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mauth entry page accessible for guests[39m[90m                                                                       [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90msmoke teacher main pages[39m[90m                                                                                    [39m [90m0.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90msmoke assistant main pages[39m[90m                                                                                  [39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90msmoke student main pages[39m[90m                                                                                    [39m [90m0.58s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m term undo is blocked after new work started               
+[39;1m  Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-'archived'
++'active'[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m201[39m
+    197▕         $response = $this->post(route('teacher.term.undo'));
+    198▕         $response->assertRedirect();
+    199▕ 
+    200▕         // State NOT rolled back
+  ➜ 201▕         $this->assertEquals('archived', $this->termA->fresh()->status);
+    202▕         $this->assertNotNull(TermRollback::find($rollback->id));
+    203▕     }
+    204▕ 
+    205▕     // ==================== 2. LESSONS DRAG & DROP REORDER ====================
+
+  [33m1   [39m[39;1mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39;22m:[39;1m201[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m full student exam flow single attempt autos… [41;1m TypeError [49;22m  
+[39;1m  App\Http\Controllers\StudentExamController::autoSave(): Return value must be of type Illuminate\Http\RedirectResponse, Illuminate\Http\JsonResponse returned[39;22m
+
+  at [32mapp\Http\Controllers\StudentExamController.php[39m:[32m257[39m
+    253▕             ['attempt_id' => $attempt->id, 'question_id' => $question->id],
+    254▕             ['selected_answer' => $selected, 'is_correct' => $isCorrect, 'mark' => $mark]
+    255▕         );
+    256▕ 
+  ➜ 257▕         return response()->json(['success' => true]);
+    258▕     }
+    259▕ 
+    260▕     /**
+    261▕      * Intentional leave -> cancel the attempt permanently.
+
+  [33m1   [39m[39;1mapp\Http\Controllers\StudentExamController.php[39;22m:[39;1m257[39;22m
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php[39;22m:[39;1m46[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m student resource visibility targeting expiry and scope…   
+[39;1m  Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m463[39m
+    459▕         // Direct URL access to out-of-scope resource must be denied
+    460▕         $this->asStudent($this->studentA)->get(route('student.resources.show', $otherGroupRes))
+    461▕             ->assertForbidden();
+    462▕         $this->asStudent($this->studentA)->get(route('student.resources.show', $otherTeacherRes))
+  ➜ 463▕             ->assertForbidden();
+    464▕     }
+    465▕ 
+    466▕     // ==================== 6. ASSISTANT RESERVATIONS ====================
+    467▕
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m assistant reservation full lifecycle with permissions…    
+[39;1m  Expected: [39;22m[31m<!DOCTYPE html>\n
+[39m[31m<html lang="ar" dir="rtl">[39m[31m\n
+    [39m[31m<head>[39m[31m\n
+        [39m[31m<meta charset="utf-8">[39m[31m\n
+        [39m[31m<meta name="viewport" content="width=device-width, initial-scale=1">[39m[31m\n
+        [39m[31m<meta name="csrf-token" content="XLMmnUSFhOMllk84Lf8eY16RRXy6OVAR5L4wytbK">[39m[31m\n
+\n
+        [39m[31m<title>[39m[31mالحجوزات - Laravel[39m[31m</title>[39m[31m\n
+\n
+        <!-- Fonts -->\n
+        [39m[31m<link rel="preconnect" href="https://fonts.googleapis.com">[39m[31m\n
+        [39m[31m<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>[39m[31m\n
+        [39m[31m<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">[39m[31m\n
+        <!-- Bootstrap Icons -->\n
+        [39m[31m<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">[39m[31m\n
+\n
+        <!-- Scripts -->\n
+        [39m[31m<link rel="preload" as="style" href="http://localhost/build/assets/app-ogZfspQw.css" />[39m[31m<link rel="modulepreload" as="script" href="http://localhost/build/assets/app-DgrZORNW.js" />[39m[31m<link rel="stylesheet" href="http://localhost/build/assets/app-ogZfspQw.css" />[39m[31m<script type="module" src="http://localhost/build/assets/app-DgrZORNW.js">[39m[31m</script>[39m[31m    [39m[31m</head>[39m[31m\n
+    [39m[31m<body>[39m[31m\n
+        [39m[31m<div class="min-h-screen flex">[39m[31m\n
+            <!-- Sidebar Overlay (mobile) -->\n
+            [39m[31m<div id="sidebar-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-200">[39m[31m</div>[39m[31m\n
+\n
+            <!-- Sidebar -->\n
+            [39m[31m<aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-64 bg-bg-sidebar border-l border-border-light transform transition-all duration-200 lg:translate-x-0 translate-x-full lg:static lg:inset-0 flex flex-col">[39m[31m\n
+                <!-- Logo -->\n
+                [39m[31m<div class="flex items-center justify-center h-16 border-b border-border-light flex-shrink-0">[39m[31m\n
+                    [39m[31m<h1 class="text-2xl font-bold text-text-primary">[39m[31mبيان[39m[31m</h1>[39m[31m\n
+                [39m[31m</div>[39m[31m\n
+\n
+                <!-- Navigation -->\n
+                [39m[31m<nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto scrollbar-thin">[39m[31m\n
+                                            [39m[31m<a class="sidebar-link" href="http://localhost/assistant/dashboard">[39m[31m\n
+    [39m[31m<i class="bi bi-speedometer2 text-lg">[39m[31m</i>[39m[31m\n
+                            [39m[31m<span>[39m[31mلوحة المساعد[39m[31m</span>[39m[31m\n
+[39m[31m</a>[39m[31m                                                                                                                                                                                                [39m[31m<a class="sidebar-link-active" href="http://localhost/assistant/reservations">[39m[31m\n
+    [39m[31m<i class="bi bi-calendar-check text-lg">[39m[31m</i>[39m[31m\n
+                            [39m[31m<span>[39m[31mالحجوزات[39m[31m</span>[39m[31m\n
+[39m[31m</a>[39m[31m                                                                        [39m[31m<a class="sidebar-link" href="http://localhost/assistant/notifications">[39m[31m\n
+    [39m[31m<i class="bi bi-bell text-lg">[39m[31m</i>[39m[31m\n
+                            [39m[31m<span>[39m[31mالإشعارات[39m[31m</span>[39m[31m\n
+[39m[31m</a>[39m[31m                        [39m[31m<a class="sidebar-link" href="http://localhost/assistant/profile">[39m[31m\n
+    [39m[31m<i class="bi bi-person text-lg">[39m[31m</i>[39m[31m\n
+                            [39m[31m<span>[39m[31mحسابي[39m[31m</span>[39m[31m\n
+[39m[31m</a>[39m[31m                                    [39m[31m</nav>[39m[31m\n
+\n
+                <!-- User Info -->\n
+                [39m[31m<div class="p-4 border-t border-border-light flex-shrink-0">[39m[31m\n
+                    [39m[31m<div class="flex items-center gap-3">[39m[31m\n
+                        [39m[31m<div class="w-10 h-10 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">[39m[31m\n
+                            a\n
+                        [39m[31m</div>[39m[31m\n
+                        [39m[31m<div class="flex-1 min-w-0">[39m[31m\n
+                            [39m[31m<p class="text-sm font-medium text-text-primary truncate">[39m[31massistant_a[39m[31m</p>[39m[31m\n
+                            [39m[31m<p class="text-xs text-text-muted">[39m[31mمساعد[39m[31m</p>[39m[31m\n
+                        [39m[31m</div>[39m[31m\n
+                    [39m[31m</div>[39m[31m\n
+                [39m[31m</div>[39m[31m\n
+            [39m[31m</aside>[39m[31m\n
+\n
+            <!-- Main Content -->\n
+            [39m[31m<div class="flex-1 flex flex-col min-w-0">[39m[31m\n
+                <!-- Top Navigation -->\n
+                [39m[31m<header class="bg-bg-card border-b border-border-light sticky top-0 z-30">[39m[31m\n
+                    [39m[31m<div class="flex items-center justify-between px-4 lg:px-6 py-3">[39m[31m\n
+                        <!-- Mobile Menu Button -->\n
+                        [39m[31m<button id="mobile-menu-button" class="lg:hidden p-2 rounded-button text-text-secondary hover:bg-gray-100 transition-colors duration-150" aria-label="فتح القائمة">[39m[31m\n
+                            [39m[31m<i class="bi bi-list text-xl">[39m[31m</i>[39m[31m\n
+                        [39m[31m</button>[39m[31m\n
+\n
+                        <!-- Page Title (Mobile) -->\n
+                        [39m[31m<h2 class="text-lg font-semibold text-text-primary lg:hidden">[39m[31m</h2>[39m[31m\n
+\n
+                        <!-- Spacer (Desktop) -->\n
+                        [39m[31m<div class="hidden lg:block">[39m[31m</div>[39m[31m\n
+\n
+                        <!-- Notification bell + Logout -->\n
+                        [39m[31m<div class="flex items-center gap-2">[39m[31m\n
+                                                                                                [39m[31m<div class="dropdown relative">[39m[31m\r\n
+    [39m[31m<button type="button" class="btn-icon text-text-secondary hover:bg-gray-100 focus-ring transition-colors duration-150" data-bs-toggle="dropdown" aria-expanded="false" aria-label="الإشعارات">[39m[31m\r\n
+        [39m[31m<i class="bi bi-bell text-xl">[39m[31m</i>[39m[31m\r\n
+            [39m[31m</button>[39m[31m\r\n
+\r\n
+    [39m[31m<div class="dropdown-menu dropdown-menu-end p-0 shadow-dropdown card fade-in" style="width: 22rem; max-height: 30rem; overflow-y: auto;">[39m[31m\r\n
+        [39m[31m<div class="flex items-center justify-between px-4 py-3 border-b border-border-light sticky-top bg-bg-card">[39m[31m\r\n
+            [39m[31m<span class="font-semibold text-text-primary">[39m[31mالإشعارات[39m[31m</span>[39m[31m\r\n
+            [39m[31m<div class="flex items-center gap-3">[39m[31m\r\n
+                                [39m[31m<a href="http://localhost/assistant/notifications" class="text-sm text-primary-600 hover:text-primary-700 transition-colors duration-150 font-medium">[39m[31mعرض الكل[39m[31m</a>[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+        [39m[31m</div>[39m[31m\r\n
+\r\n
+                    [39m[31m<div class="px-4 py-8 text-center text-sm text-text-muted">[39m[31mلا توجد إشعارات حالياً[39m[31m</div>[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+[39m[31m</div>[39m[31m                                                                                                                                                            [39m[31m<form method="POST" action="http://localhost/logout" class="inline">[39m[31m\n
+                                        [39m[31m<input type="hidden" name="_token" value="XLMmnUSFhOMllk84Lf8eY16RRXy6OVAR5L4wytbK" autocomplete="off">[39m[31m                                        [39m[31m<button type="submit" class="btn-ghost btn-sm">[39m[31m\n
+                                            [39m[31m<i class="bi bi-box-arrow-right">[39m[31m</i>[39m[31m\n
+                                            [39m[31m<span class="hidden sm:inline">[39m[31mتسجيل الخروج[39m[31m</span>[39m[31m\n
+                                        [39m[31m</button>[39m[31m\n
+                                    [39m[31m</form>[39m[31m\n
+                                                                                    [39m[31m</div>[39m[31m\n
+                    [39m[31m</div>[39m[31m\n
+                [39m[31m</header>[39m[31m\n
+\n
+                <!-- Page Content -->\n
+                [39m[31m<main class="flex-1 p-4 lg:p-8 overflow-y-auto pb-28 lg:pb-8">[39m[31m\n
+                    [39m[31m<div class="page-header">[39m[31m\r\n
+        [39m[31m<div class="flex items-end justify-between flex-wrap gap-3">[39m[31m\r\n
+        [39m[31m<div>[39m[31m\r\n
+            [39m[31m<h1 class="page-title">[39m[31mالحجوزات[39m[31m</h1>[39m[31m\r\n
+                            [39m[31m<p class="page-description">[39m[31mكل الحجوزات التي أدارها المدرس[39m[31m</p>[39m[31m\r\n
+                    [39m[31m</div>[39m[31m\r\n
+                    [39m[31m<div class="flex gap-2">[39m[31m<a href='http://localhost/assistant/reservations/create' class='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium'>[39m[31m<i class='bi bi-plus-lg'>[39m[31m</i>[39m[31m حجز جديد[39m[31m</a>[39m[31m</div>[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+[39m[31m</div>[39m[31m\r\n
+            [39m[31m<div class="bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-lg text-sm">[39m[31mتم إلغاء الحجز بنجاح.[39m[31m</div>[39m[31m\r\n
+    \r\n
+    \r\n
+    \r\n
+    [39m[31m<div class="bg-white rounded-lg shadow-sm p-4 mb-4">[39m[31m\r\n
+        [39m[31m<form method="GET" action="http://localhost/assistant/reservations" class="grid grid-cols-1 md:grid-cols-4 gap-4">[39m[31m\r\n
+            [39m[31m<div>[39m[31m\r\n
+                [39m[31m<label class="block text-sm font-medium text-gray-700 mb-1">[39m[31mبحث[39m[31m</label>[39m[31m\r\n
+                [39m[31m<input type="text" name="search" value="XYZUNIQUE" placeholder="بحث بالعنوان أو الوصف..." class="w-full border border-gray-300 rounded-lg px-3 py-2">[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+            [39m[31m<div>[39m[31m\r\n
+                [39m[31m<label class="block text-sm font-medium text-gray-700 mb-1">[39m[31mالنوع[39m[31m</label>[39m[31m\r\n
+                [39m[31m<select name="type" class="w-full border border-gray-300 rounded-lg px-3 py-2">[39m[31m\r\n
+                    [39m[31m<option value="">[39m[31mكل الأنواع[39m[31m</option>[39m[31m\r\n
+                                            [39m[31m<option value="printed_notes" >[39m[31mملاحظات مطبوعة[39m[31m</option>[39m[31m\r\n
+                                            [39m[31m<option value="books" >[39m[31mكتب[39m[31m</option>[39m[31m\r\n
+                                            [39m[31m<option value="booklets" >[39m[31mبوكليت[39m[31m</option>[39m[31m\r\n
+                                            [39m[31m<option value="practice_sheets" >[39m[31mأوراق تدريب[39m[31m</option>[39m[31m\r\n
+                                            [39m[31m<option value="external_material" >[39m[31mمادة خارجية[39m[31m</option>[39m[31m\r\n
+                                            [39m[31m<option value="other" >[39m[31mأخرى[39m[31m</option>[39m[31m\r\n
+                                    [39m[31m</select>[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+            [39m[31m<div>[39m[31m\r\n
+                [39m[31m<label class="block text-sm font-medium text-gray-700 mb-1">[39m[31mالحالة[39m[31m</label>[39m[31m\r\n
+                [39m[31m<select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2">[39m[31m\r\n
+                    [39m[31m<option value="">[39m[31mكل الحالات[39m[31m</option>[39m[31m\r\n
+                    [39m[31m<option value="draft" >[39m[31mمسودة[39m[31m</option>[39m[31m\r\n
+                    [39m[31m<option value="open" >[39m[31mمفتوح[39m[31m</option>[39m[31m\r\n
+                    [39m[31m<option value="closed" >[39m[31mمغلق[39m[31m</option>[39m[31m\r\n
+                    [39m[31m<option value="archived" >[39m[31mمؤرشف[39m[31m</option>[39m[31m\r\n
+                [39m[31m</select>[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+            [39m[31m<div class="flex items-end gap-2">[39m[31m\r\n
+                [39m[31m<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">[39m[31mفلتر[39m[31m</button>[39m[31m\r\n
+                [39m[31m<a href="http://localhost/assistant/reservations" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">[39m[31mإلغاء[39m[31m</a>[39m[31m\r\n
+            [39m[31m</div>[39m[31m\r\n
+        [39m[31m</form>[39m[31m\r\n
+    [39m[31m</div>[39m[31m\r\n
+\r\n
+    [39m[31m<div class="bg-white rounded-lg shadow-sm overflow-hidden">[39m[31m\r\n
+        [39m[31m<table class="w-full text-sm text-right">[39m[31m\r\n
+            [39m[31m<thead class="bg-gray-50 text-gray-600">[39m[31m\r\n
+                [39m[31m<tr>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالعنوان[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالنوع[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالمجموعات[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالحالة[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالكمية[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالمحجوز[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mالمتبقي[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mتسليم[39m[31m</th>[39m[31m\r\n
+                    [39m[31m<th class="px-4 py-3">[39m[31mإجراءات[39m[31m</th>[39m[31m\r\n
+                [39m[31m</tr>[39m[31m\r\n
+            [39m[31m</thead>[39m[31m\r\n
+            [39m[31m<tbody class="divide-y divide-gray-100">[39m[31m\r\n
+                                    [39m[31m<tr>[39m[31m\r\n
+                        [39m[31m<td colspan="9" class="px-4 py-8">[39m[31m\r\n
+                            [39m[31m<div class="empty-state">[39m[31m\r\n
+    [39m[31m<div class="empty-state-icon">[39m[31m\r\n
+        [39m[31m<i class="bi bi-calendar-event">[39m[31m</i>[39m[31m\r\n
+    [39m[31m</div>[39m[31m\r\n
+    [39m[31m<h3 class="empty-state-title">[39m[31mلا توجد حجوزات بعد[39m[31m</h3>[39m[31m\r\n
+            [39m[31m<p class="empty-state-message">[39m[31mافتح أول حجز لطلابك.[39m[31m</p>[39m[31m\r\n
+                [39m[31m<div class="mt-6">[39m[31m<a href='http://localhost/assistant/reservations/create' class='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium'>[39m[31m<i class='bi bi-plus-lg'>[39m[31m</i>[39m[31m حجز جديد[39m[31m</a>[39m[31m</div>[39m[31m\r\n
+    [39m[31m</div>[39m[31m                        [39m[31m</td>[39m[31m\r\n
+                    [39m[31m</tr>[39m[31m\r\n
+                            [39m[31m</tbody>[39m[31m\r\n
+        [39m[31m</table>[39m[31m\r\n
+    [39m[31m</div>[39m[31m\n
+                [39m[31m</main>[39m[31m\n
+            [39m[31m</div>[39m[31m\n
+        [39m[31m</div>[39m[31m\n
+\n
+        <!-- Bottom Navigation (Mobile) -->\n
+                        [39m[31m<nav class="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-bg-card border-t border-border-light flex justify-around items-center py-2 shadow-dropdown">[39m[31m\n
+            [39m[31m<a href="http://localhost/assistant/dashboard" class="flex flex-col items-center gap-0.5 text-xs text-text-muted transition-colors duration-150">[39m[31m\n
+                [39m[31m<i class="bi bi-speedometer2 text-xl">[39m[31m</i>[39m[31m<span>[39m[31mالرئيسية[39m[31m</span>[39m[31m\n
+            [39m[31m</a>[39m[31m\n
+                        [39m[31m<a href="http://localhost/assistant/notifications" class="flex flex-col items-center gap-0.5 text-xs text-text-muted transition-colors duration-150">[39m[31m\n
+                [39m[31m<i class="bi bi-bell text-xl">[39m[31m</i>[39m[31m<span>[39m[31mالإشعارات[39m[31m</span>[39m[31m\n
+            [39m[31m</a>[39m[31m\n
+            [39m[31m<a href="http://localhost/assistant/profile" class="flex flex-col items-center gap-0.5 text-xs text-text-muted transition-colors duration-150">[39m[31m\n
+                [39m[31m<i class="bi bi-person text-xl">[39m[31m</i>[39m[31m<span>[39m[31mحسابي[39m[31m</span>[39m[31m\n
+            [39m[31m</a>[39m[31m\n
+        [39m[31m</nav>[39m[31m\n
+                \n
+        [39m[31m<script>[39m[31m\n
+            function copyTeacherCode() {\n
+                const code = document.getElementById('teacher-code');\n
+                if (code) {\n
+                    navigator.clipboard.writeText(code.textContent.trim()).then(() => {\n
+                        const btn = document.querySelector('[onclick="copyTeacherCode()"]');\n
+                        if (btn) {\n
+                            const original = btn.innerHTML;\n
+                            btn.innerHTML = '[39m[31m<i class="bi bi-check-lg">[39m[31m</i>[39m[31m تم النسخ';\n
+                            setTimeout(() => btn.innerHTML = original, 2000);\n
+                        }\n
+                    });\n
+                }\n
+            }\n
+\n
+            const mobileMenuButton = document.getElementById('mobile-menu-button');\n
+            const sidebar = document.getElementById('sidebar');\n
+            const sidebarOverlay = document.getElementById('sidebar-overlay');\n
+\n
+            function toggleSidebar() {\n
+                sidebar.classList.toggle('translate-x-full');\n
+                sidebarOverlay.classList.toggle('hidden');\n
+            }\n
+\n
+            if (mobileMenuButton) {\n
+                mobileMenuButton.addEventListener('click', toggleSidebar);\n
+            }\n
+            if (sidebarOverlay) {\n
+                sidebarOverlay.addEventListener('click', toggleSidebar);\n
+            }\n
+        [39m[31m</script>[39m[31m\n
+\n
+        <!-- Toast container -->\r\n
+[39m[31m<div id="toast-container" class="toast">[39m[31m</div>[39m[31m\r\n
+\r\n
+[39m[31m<script>[39m[31m\r\n
+    function showToast(message, type = 'success') {\r\n
+        const colors = { success: 'toast-success', error: 'toast-error', info: 'toast-info', warning: 'toast-warning' };\r\n
+        const icons = { success: 'bi-check-circle-fill', error: 'bi-x-circle-fill', info: 'bi-info-circle-fill', warning: 'bi-exclamation-triangle-fill' };\r\n
+        const el = document.createElement('div');\r\n
+        el.className = (colors[type] || colors.success) + ' fade-in';\r\n
+        el.innerHTML = '[39m[31m<i class="bi ' + (icons[type] || icons.success) + '">[39m[31m</i>[39m[31m<span>[39m[31m' + message + '[39m[31m</span>[39m[31m';\r\n
+        document.getElementById('toast-container').appendChild(el);\r\n
+        setTimeout(function () { el.style.opacity = '0'; el.style.transform = 'translateY(-8px)'; setTimeout(function () { el.remove(); }, 200); }, 3500);\r\n
+    }\r\n
+     window.addEventListener('DOMContentLoaded', function () { showToast('تم إلغاء الحجز بنجاح.', 'success'); });             [39m[31m</script>[39m[31m\r\n
+\r\n
+[39m[31m<script>[39m[31m\r\n
+    // Prevent double submit + spinner\r\n
+    document.addEventListener('submit', function (e) {\r\n
+        const form = e.target;\r\n
+        if (form.dataset.locked) { e.preventDefault(); return; }\r\n
+        form.dataset.locked = '1';\r\n
+        const btn = form.querySelector('button[type="submit"]');\r\n
+        if (btn) {\r\n
+            btn.disabled = true;\r\n
+            const original = btn.innerHTML;\r\n
+            btn.innerHTML = '[39m[31m<span class="spinner-border spinner-border-sm" role="status">[39m[31m</span>[39m[31m جارٍ التنفيذ...';\r\n
+            setTimeout(function () { btn.disabled = false; btn.innerHTML = original; }, 4000);\r\n
+        }\r\n
+    });\r\n
+[39m[31m</script>[39m[31m    [39m[31m</body>[39m[31m\n
+[39m[31m</html>[39m[39;1m
+
+  Not to contain: [39;22m[32mXYZUNIQUE[39m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m524[39m
+    520▕         ]);
+    521▕         $list = $this->actingAs($this->assistantA, 'assistant')
+    522▕             ->get(route('assistant.reservations.index', ['search' => 'XYZUNIQUE']));
+    523▕         $list->assertOk();
+  ➜ 524▕         $this->assertStringNotContainsString('XYZUNIQUE', $list->getContent());
+    525▕     }
+    526▕ 
+    527▕     public function test_assistant_without_permission_gets_403_immediately(): void
+    528▕     {
+
+  [33m1   [39m[39;1mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39;22m:[39;1m524[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m assistant qr attendance full cycle                        
+[39;1m  Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-'absent'
++'present'[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m629[39m
+    625▕         $record = AttendanceRecord::where('attendance_session_id', $session->id)->first();
+    626▕         $this->post(route('assistant.attendance.record.update', $session), [
+    627▕             'student_id' => $this->studentA->id, 'attendance_type' => 'absent',
+    628▕         ])->assertRedirect();
+  ➜ 629▕         $this->assertEquals('absent', $record->fresh()->attendance_type);
+    630▕ 
+    631▕         $this->post(route('assistant.attendance.close', $session))->assertRedirect();
+    632▕         $this->assertEquals('closed', $session->fresh()->status);
+    633▕     }
+
+  [33m1   [39m[39;1mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39;22m:[39;1m629[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m teacher publishing exam notifies targeted students onl…   
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m689[39m
+    685▕         $exam = $this->makeExam($this->teacherA, [$this->groupA1], 'draft');
+    686▕ 
+    687▕         $this->actingAs($this->teacherA)->post(route('teacher.exams.publish', $exam))->assertRedirect();
+    688▕ 
+  ➜ 689▕         $this->assertTrue(Notification::where('student_id', $this->studentA->id)
+    690▕             ->where('type', 'exam')->exists());
+    691▕         // studentB (different teacher/group) gets nothing
+    692▕         $this->assertFalse(Notification::where('student_id', $this->studentB->id)
+    693▕             ->where('type', 'exam')->exists());
+
+  [33m1   [39m[39;1mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39;22m:[39;1m689[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint70FinalRuntimeSecurityQaTest[22m [90m>[39m login redirects by role and logout works                  
+[39;1m  Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-'http://localhost/student/dashboard'
++'http://localhost'[39;22m
+
+  at [32mtests\Feature\Sprint70FinalRuntimeSecurityQaTest.php[39m:[32m741[39m
+    737▕             ->assertRedirect(route('teacher.dashboard'));
+    738▕ 
+    739▕         // Student login
+    740▕         $this->post('/login', ['mobile' => '0111111111', 'password' => 'password'])
+  ➜ 741▕             ->assertRedirect(route('student.dashboard'));
+    742▕ 
+    743▕         // Logout
+    744▕         $this->actingAs($this->teacherA)->post('/logout')->assertRedirect('/');
+    745▕         $this->get(route('teacher.dashboard'))->assertRedirect('/login');
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m23 passed[39;22m[90m (174 assertions)[39m
+  [90mDuration:[39m [39m66.82s[39m
+

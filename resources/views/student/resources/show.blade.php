@@ -24,7 +24,7 @@
                     @case('pdf')
                         @if($resource->file_path)
                             <iframe src="{{ asset('storage/' . $resource->file_path) }}" class="w-full h-[600px] border rounded-lg"></iframe>
-                            <a href="{{ asset('storage/' . $resource->file_path) }}" download class="mt-3 inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">تحميل</a>
+                            <a href="{{ route('student.resources.download', $resource) }}" class="mt-3 inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">تحميل</a>
                         @else
                             <div class="text-center text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-lg px-4 py-10">الملف غير متوفر للتحميل حالياً.</div>
                         @endif
@@ -32,7 +32,7 @@
                     @case('image')
                         @if($resource->file_path)
                             <img src="{{ asset('storage/' . $resource->file_path) }}" class="max-w-full rounded-lg mx-auto" alt="{{ $resource->title }}">
-                            <a href="{{ asset('storage/' . $resource->file_path) }}" download class="mt-3 inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">تحميل</a>
+                            <a href="{{ route('student.resources.download', $resource) }}" class="mt-3 inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">تحميل</a>
                         @else
                             <div class="text-center text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-lg px-4 py-10">الملف غير متوفر للتحميل حالياً.</div>
                         @endif
@@ -40,7 +40,7 @@
                     @case('zip')
                     @case('other')
                         @if($resource->file_path)
-                            <a href="{{ asset('storage/' . $resource->file_path) }}" download class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">تحميل الملف</a>
+                            <a href="{{ route('student.resources.download', $resource) }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">تحميل الملف</a>
                         @else
                             <div class="text-center text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-lg px-4 py-10">الملف غير متوفر للتحميل حالياً.</div>
                         @endif

@@ -45,6 +45,8 @@
             @endforelse
         </div>
 
-        {{ $exams->links() }}
+        @if($exams instanceof \Illuminate\Pagination\LengthAwarePaginator)
+            {{ $exams->links() }}
+        @endif
     </div>
 </x-dashboard-layout>

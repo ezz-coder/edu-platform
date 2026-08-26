@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GroupEnrollment;
 use App\Models\Notification;
+use App\Utilities\NotificationHelper;
 use App\Models\Reservation;
 use App\Models\ReservationItem;
 use App\Models\StudyGroup;
@@ -81,8 +82,10 @@ class StudentReservationController extends Controller
             abort(403);
         }
 
+        // Sprint 63: a cancelled item does not count as an active reservation.
         $already = ReservationItem::where('reservation_id', $reservation->id)
             ->where('student_id', $account->id)
+            ->where('delivery_status', '!=', 'cancelled')
             ->first();
 
         return view('student.reservations.show', [
@@ -128,21 +131,37 @@ class StudentReservationController extends Controller
             abort(403, 'حساب الطالب غير مفعل. لا يمكنك الحجز.');
         }
 
+        // Sprint 63: cancelled items do not count as an existing reservation.
         $exists = ReservationItem::where('reservation_id', $reservation->id)
             ->where('student_id', $account->id)
+            ->where('delivery_status', '!=', 'cancelled')
             ->exists();
 
         if ($exists) {
             return back()->with('error', 'لقد قمت بالحجز مسبقاً.');
         }
 
-        ReservationItem::create([
-            'reservation_id' => $reservation->id,
-            'student_id' => $account->id,
-            'group_id' => $group->id,
-            'reserved_at' => now(),
-            'delivery_status' => 'pending',
-        ]);
+        // Sprint 63: the table has a UNIQUE(reservation_id, student_id) index,
+        // so re-reserving after cancellation revives the cancelled item.
+        $cancelledItem = ReservationItem::where('reservation_id', $reservation->id)
+            ->where('student_id', $account->id)
+            ->where('delivery_status', 'cancelled')
+            ->first();
+
+        if ($cancelledItem) {
+            $cancelledItem->update([
+                'reserved_at' => now(),
+                'delivery_status' => 'pending',
+            ]);
+        } else {
+            ReservationItem::create([
+                'reservation_id' => $reservation->id,
+                'student_id' => $account->id,
+                'group_id' => $group->id,
+                'reserved_at' => now(),
+                'delivery_status' => 'pending',
+            ]);
+        }
 
         // Auto-close if quantity is now zero (for limited reservations)
         if (! $reservation->isUnlimited() && $reservation->remaining() <= 0) {
@@ -150,6 +169,58 @@ class StudentReservationController extends Controller
         }
 
         return back()->with('success', 'تم الحجز بنجاح.');
+    }
+
+    /**
+     * Sprint 63: Student cancels their own reservation.
+     * - Only the owner can cancel (authorization via active student account).
+     * - Only pending (not yet delivered) items can be cancelled.
+     * - Quantity is restored automatically because reservedCount() excludes cancelled items.
+     * - The teacher receives one notification per cancellation.
+     */
+    public function cancel(Request $request, ReservationItem $item): RedirectResponse
+    {
+        $account = auth()->user()->activeStudentAccount();
+
+        // Authorization: a student may only cancel his own reservation item.
+        if (! $account || $item->student_id !== $account->id) {
+            abort(403);
+        }
+
+        $reservation = $item->reservation;
+
+        if ($item->isCancelled()) {
+            return back()->with('error', 'تم إلغاء هذا الحجز مسبقاً.');
+        }
+
+        if ($item->isDelivered()) {
+            return back()->with('error', 'لا يمكن إلغاء حجز تم تسليمه.');
+        }
+
+        $item->update(['delivery_status' => 'cancelled']);
+
+        // Inverse of the existing auto-close logic: if the reservation was auto-closed
+        // because quantity reached zero, reopening restores availability.
+        if ($reservation->isClosed()
+            && ! $reservation->isUnlimited()
+            && $reservation->remaining() > 0) {
+            $reservation->update(['status' => 'open']);
+        }
+
+        // Teacher notification (existing infrastructure, one per cancellation).
+        NotificationHelper::notifyTeacher(
+            $reservation->teacher_id,
+            'reservation',
+            'إلغاء حجز من طالب',
+            sprintf(
+                'قام الطالب %s بإلغاء حجز "%s".',
+                $account->name,
+                $reservation->title
+            ),
+            route('teacher.reservations.show', $reservation)
+        );
+
+        return back()->with('success', 'تم إلغاء الحجز بنجاح.');
     }
 
     private function activeGroup(?User $account): ?StudyGroup

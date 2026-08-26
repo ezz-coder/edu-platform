@@ -1,0 +1,33 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sprint68CommunicationParent2FATest[39m
+  [32;1m✓[39;22m[90m [39m[90mteacher can send message to enrolled student[39m[90m                                                                [39m [90m7.00s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent receives message and notification[39m[90m                                                                   [39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mread unread state works[39m[90m                                                                                     [39m [90m4.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent cannot access other students thread[39m[90m                                                                 [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher cannot message student of another teacher[39m[90m                                                           [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mguest and assistant cannot access messaging[39m[90m                                                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher creates announcement with targets[39m[90m                                                                   [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtargeted students see announcement others do not[39m[90m                                                            [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mannouncement edit and delete by owner only[39m[90m                                                                  [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mannouncement produces notifications for targeted students[39m[90m                                                   [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher cannot target groups he does not own[39m[90m                                                                [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent can register and is linked to children[39m[90m                                                               [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent registration requires linked student[39m[90m                                                                 [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent can login and view child data[39m[90m                                                                        [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mwrong parent credentials rejected[39m[90m                                                                           [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent cannot view unrelated student[39m[90m                                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent cannot access teacher or assistant areas[39m[90m                                                             [39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mparent views are read only[39m[90m                                                                                  [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher can enable 2fa with password[39m[90m                                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90menable requires correct password[39m[90m                                                                            [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlogin with 2fa issues otp challenge[39m[90m                                                                         [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcorrect otp completes login[39m[90m                                                                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mwrong otp rejected[39m[90m                                                                                          [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchallenge requires pending session[39m[90m                                                                          [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdisable 2fa restores normal login[39m[90m                                                                           [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent login is not affected by 2fa[39m[90m                                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnon teachers cannot toggle 2fa routes[39m[90m                                                                       [39m [90m0.10s[39m  
+
+  [90mTests:[39m    [32;1m27 passed[39;22m[90m (91 assertions)[39m
+  [90mDuration:[39m [39m26.77s[39m
+

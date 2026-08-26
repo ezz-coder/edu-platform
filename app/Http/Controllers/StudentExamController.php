@@ -226,7 +226,7 @@ class StudentExamController extends Controller
     /**
      * Auto-save answer during exam.
      */
-    public function autoSave(Request $request, ExamAttempt $attempt): RedirectResponse
+    public function autoSave(Request $request, ExamAttempt $attempt): \Illuminate\Http\JsonResponse
     {
         $this->authorizeAttempt($attempt);
 

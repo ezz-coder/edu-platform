@@ -41,6 +41,17 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
+        // Sprint 68 — Two-Factor Authentication (email OTP) for teachers.
+        if ($user->role === 'teacher' && $user->two_factor_enabled) {
+            Auth::guard('web')->logout();
+
+            \App\Http\Controllers\Auth\TwoFactorController::issueCode($user);
+
+            $request->session()->put('two_factor:id', $user->id);
+
+            return redirect()->route('two-factor.challenge');
+        }
+
         // Students may have multiple independent accounts sharing the same mobile.
         if ($user->role === 'student') {
             $accounts = User::where('role', 'student')

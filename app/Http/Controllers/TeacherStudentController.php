@@ -34,11 +34,21 @@ class TeacherStudentController extends Controller
             ->get();
 
         // Build a flat, searchable/filterable list of enrollments.
+        // Sprint 67: Advanced Search — search by name/code/mobile plus filters
+        // by group, status, grade level (الصف) and gender type.
         $enrollments = GroupEnrollment::query()
             ->whereHas('group', fn ($q) => $q->where('teacher_id', $teacherId))
             ->with(['student', 'group'])
             ->when($request->group_id, fn ($q) => $q->where('group_id', $request->group_id))
             ->when($request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($request->grade_level, fn ($q) => $q->whereHas(
+                'group',
+                fn ($gq) => $gq->where('grade_level', $request->grade_level)
+            ))
+            ->when($request->gender_type, fn ($q) => $q->whereHas(
+                'group',
+                fn ($gq) => $gq->where('gender_type', $request->gender_type)
+            ))
             ->when($request->search, function ($q) use ($request) {
                 $search = $request->search;
                 $q->whereHas('student', function ($sq) use ($search) {
@@ -55,7 +65,7 @@ class TeacherStudentController extends Controller
             'groups' => $groups,
             'transferRequests' => $transferRequests,
             'enrollments' => $enrollments,
-            'filters' => $request->only(['search', 'group_id', 'status']),
+            'filters' => $request->only(['search', 'group_id', 'status', 'grade_level', 'gender_type']),
         ]);
     }
 

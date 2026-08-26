@@ -49,7 +49,9 @@
         </div>
 
         <div class="pagination">
-            {{ $reservations->links() }}
+            @if($reservations instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                {{ $reservations->links() }}
+            @endif
         </div>
     </div>
 </x-dashboard-layout>

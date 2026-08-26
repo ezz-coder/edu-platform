@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\ParentAuthController;
+use App\Http\Controllers\Auth\TwoFactorController;
+use App\Http\Controllers\ParentDashboardController;
+use App\Http\Controllers\StudentMessageController;
+use App\Http\Controllers\TeacherAnnouncementController;
+use App\Http\Controllers\TeacherMessageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminGroupController;
 use App\Http\Controllers\AdminUserController;
@@ -16,12 +22,18 @@ use App\Http\Controllers\StudentResourceController;
 use App\Http\Controllers\AssistantAuthController;
 use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\TeacherAssistantController;
+use App\Http\Controllers\TeacherCalendarController;
 use App\Http\Controllers\TeacherAttendanceController;
 use App\Http\Controllers\TeacherDashboardController;
 use App\Http\Controllers\TeacherExamController;
+use App\Http\Controllers\TeacherGradeController;
 use App\Http\Controllers\TeacherGroupController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\TeacherLessonController;
+use App\Http\Controllers\TeacherProgressController;
+use App\Http\Controllers\TeacherReportController;
+use App\Http\Controllers\TeacherSettingsController;
+use App\Http\Controllers\TeacherStudentImportController;
 use App\Http\Controllers\TeacherReservationController;
 use App\Http\Controllers\TeacherResourceController;
 use App\Http\Controllers\TeacherStudentController;
@@ -102,6 +114,10 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/term/end/execute', [TeacherTermController::class, 'execute'])->name('term.execute');
     Route::post('/term/undo', [TeacherTermController::class, 'undo'])->name('term.undo');
 
+    // Sprint 67: bulk lesson creation (registered before wildcard routes).
+    Route::get('/lessons/bulk-create', [TeacherLessonController::class, 'bulkCreate'])->name('lessons.bulk.create');
+    Route::post('/lessons/bulk-create', [TeacherLessonController::class, 'bulkStore'])->name('lessons.bulk.store');
+
     Route::get('/lessons', [TeacherLessonController::class, 'index'])->name('lessons.index');
     Route::get('/lessons/create', [TeacherLessonController::class, 'create'])->name('lessons.create');
     Route::post('/lessons', [TeacherLessonController::class, 'store'])->name('lessons.store');
@@ -154,8 +170,8 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
     Route::put('/exams/{exam}', [TeacherExamController::class, 'update'])->name('exams.update');
     Route::post('/exams/{exam}/duplicate', [TeacherExamController::class, 'duplicate'])->name('exams.duplicate');
     Route::delete('/exams/{exam}', [TeacherExamController::class, 'destroy'])->name('exams.destroy');
-    Route::post('/exams/{exam}/restore', [TeacherExamController::class, 'restore'])->name('exams.restore');
-    Route::delete('/exams/{exam}/force-delete', [TeacherExamController::class, 'forceDelete'])->name('exams.force-delete');
+    Route::post('/exams/{exam}/restore', [TeacherExamController::class, 'restore'])->name('exams.restore')->withTrashed();
+    Route::delete('/exams/{exam}/force-delete', [TeacherExamController::class, 'forceDelete'])->name('exams.force-delete')->withTrashed();
     Route::get('/exams/{exam}/attempts', [TeacherExamController::class, 'attempts'])->name('exams.attempts');
     Route::get('/exams/{exam}/time', [TeacherExamController::class, 'editTime'])->name('exams.time.edit');
     Route::put('/exams/{exam}/time', [TeacherExamController::class, 'updateTime'])->name('exams.time.update');
@@ -179,6 +195,10 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/exams/{exam}/questions/attach', [QuestionBankController::class, 'attachToExam'])->name('exams.questions.attach');
 
     Route::get('/students', [TeacherStudentController::class, 'index'])->name('students.index');
+    // Sprint 66: bulk student import from CSV / Excel.
+    // NOTE: registered BEFORE the {enrollment} wildcard so "import" is not captured as an enrollment id.
+    Route::get('/students/import', [TeacherStudentImportController::class, 'create'])->name('students.import');
+    Route::post('/students/import', [TeacherStudentImportController::class, 'store'])->name('students.import.store');
     Route::get('/students/{enrollment}', [StudentProfileController::class, 'show'])->name('students.show');
     Route::get('/students/{enrollment}/history', [TeacherStudentController::class, 'history'])->name('students.history');
     Route::post('/students/{enrollment}/move', [TeacherStudentController::class, 'move'])->name('students.move');
@@ -193,6 +213,37 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
     Route::get('/students/{enrollment}/card', [StudentCardController::class, 'teacherShow'])->name('students.card');
     Route::get('/groups/{group}/cards/print', [StudentCardController::class, 'printGroup'])->name('groups.cards.print');
     Route::post('/groups/{group}/students', [TeacherStudentController::class, 'store'])->name('groups.students.store');
+
+    Route::get('/grades', [TeacherGradeController::class, 'index'])->name('grades.index');
+    Route::get('/grades/{exam}', [TeacherGradeController::class, 'show'])->name('grades.show');
+    // Sprint 66: export exam grades to CSV (teacher's own data only).
+    Route::get('/grades/{exam}/export', [TeacherGradeController::class, 'export'])->name('grades.export');
+    Route::put('/grades/attempt/{attempt}', [TeacherGradeController::class, 'update'])->name('grades.update');
+
+    // Sprint 66: teacher reports (attendance / grades / activity summaries).
+    Route::get('/reports', [TeacherReportController::class, 'index'])->name('reports.index');
+
+    // Sprint 67: calendar, student progress tracking, settings.
+    Route::get('/calendar', [TeacherCalendarController::class, 'index'])->name('calendar.index');
+    Route::get('/progress', [TeacherProgressController::class, 'index'])->name('progress.index');
+    Route::get('/settings', [TeacherSettingsController::class, 'index'])->name('settings.index');
+
+    // Sprint 68: messaging (teacher ↔ his enrolled students only).
+    Route::get('/messages', [TeacherMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{student}', [TeacherMessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{student}', [TeacherMessageController::class, 'store'])->name('messages.store');
+
+    // Sprint 68: announcements.
+    Route::get('/announcements', [TeacherAnnouncementController::class, 'index'])->name('announcements.index');
+    Route::get('/announcements/create', [TeacherAnnouncementController::class, 'create'])->name('announcements.create');
+    Route::post('/announcements', [TeacherAnnouncementController::class, 'store'])->name('announcements.store');
+    Route::get('/announcements/{announcement}/edit', [TeacherAnnouncementController::class, 'edit'])->name('announcements.edit');
+    Route::put('/announcements/{announcement}', [TeacherAnnouncementController::class, 'update'])->name('announcements.update');
+    Route::delete('/announcements/{announcement}', [TeacherAnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
+    // Sprint 68: two-factor authentication (email OTP).
+    Route::post('/two-factor/enable', [TwoFactorController::class, 'enable'])->name('two-factor.enable');
+    Route::post('/two-factor/disable', [TwoFactorController::class, 'disable'])->name('two-factor.disable');
 
     Route::get('/assistants', [TeacherAssistantController::class, 'index'])->name('assistants.index');
     Route::get('/assistants/create', [TeacherAssistantController::class, 'create'])->name('assistants.create');
@@ -280,8 +331,8 @@ Route::middleware(['web', 'assistant'])->prefix('assistant')->name('assistant.')
         Route::get('/exams/{exam}/edit', [AssistantController::class, 'examsEdit'])->name('exams.edit');
         Route::put('/exams/{exam}', [AssistantController::class, 'examsUpdate'])->name('exams.update');
         Route::delete('/exams/{exam}', [AssistantController::class, 'examsDestroy'])->name('exams.destroy');
-        Route::post('/exams/{exam}/restore', [AssistantController::class, 'examsRestore'])->name('exams.restore');
-        Route::delete('/exams/{exam}/force-delete', [AssistantController::class, 'examsForceDelete'])->name('exams.force-delete');
+        Route::post('/exams/{exam}/restore', [AssistantController::class, 'examsRestore'])->name('exams.restore')->withTrashed();
+        Route::delete('/exams/{exam}/force-delete', [AssistantController::class, 'examsForceDelete'])->name('exams.force-delete')->withTrashed();
         Route::get('/exams/{exam}/questions/pick', [AssistantController::class, 'examsPickFromBank'])->name('exams.questions.pick');
         Route::post('/exams/{exam}/questions/attach', [AssistantController::class, 'examsAttachFromBank'])->name('exams.questions.attach');
         Route::get('/question-bank', [AssistantController::class, 'questionBankIndex'])->name('question-bank.index');
@@ -302,6 +353,12 @@ Route::middleware(['web', 'assistant'])->prefix('assistant')->name('assistant.')
         Route::get('/groups', [AssistantController::class, 'groupsIndex'])->name('groups.index');
     });
 
+    Route::middleware(['assistant:can_manage_grades'])->group(function () {
+        Route::get('/grades', [AssistantController::class, 'gradesIndex'])->name('grades.index');
+        Route::get('/grades/{exam}', [AssistantController::class, 'gradesShow'])->name('grades.show');
+        Route::put('/grades/attempt/{attempt}', [AssistantController::class, 'gradesUpdate'])->name('grades.update');
+    });
+
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/{notification}/open', [NotificationController::class, 'open'])->name('notifications.open');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
@@ -319,6 +376,8 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/dashboard', [StudentResourceController::class, 'home'])->name('dashboard');
     Route::get('/resources', [StudentResourceController::class, 'home'])->name('resources.home');
     Route::get('/resources/{resource}', [StudentResourceController::class, 'show'])->name('resources.show');
+    // Sprint 63: direct download without visiting the details page.
+    Route::get('/resources/{resource}/download', [StudentResourceController::class, 'download'])->name('resources.download');
     Route::get('/groups', [StudentGroupController::class, 'index'])->name('groups.index');
     Route::get('/groups/{group}/transfer', [StudentTransferController::class, 'create'])->name('transfer.create');
     Route::post('/groups/{group}/transfer', [StudentTransferController::class, 'store'])->name('transfer.store');
@@ -327,6 +386,8 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/reservations/history', [StudentReservationController::class, 'history'])->name('reservations.history');
     Route::get('/reservations/{reservation}', [StudentReservationController::class, 'show'])->name('reservations.show');
     Route::post('/reservations/{reservation}/reserve', [StudentReservationController::class, 'reserve'])->name('reservations.reserve');
+    // Sprint 63: student cancels his own reservation item.
+    Route::post('/reservations/item/{item}/cancel', [StudentReservationController::class, 'cancel'])->name('reservations.cancel');
 
     Route::get('/exams', [StudentExamController::class, 'index'])->name('exams.index');
     Route::post('/exams/{exam}/start', [StudentExamController::class, 'start'])->name('exams.start');
@@ -342,6 +403,37 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/account', [StudentAccountController::class, 'show'])->name('account');
     Route::get('/report', [StudentAccountController::class, 'report'])->name('report');
     Route::get('/card', [StudentCardController::class, 'studentShow'])->name('card');
+
+    // Sprint 65: separate grades / attendance / settings pages + mobile change.
+    Route::get('/grades', [StudentAccountController::class, 'grades'])->name('grades');
+    Route::get('/attendance', [StudentAccountController::class, 'attendance'])->name('attendance');
+    Route::get('/settings', [StudentAccountController::class, 'settings'])->name('settings');
+    Route::patch('/settings/mobile', [StudentAccountController::class, 'updateMobile'])->name('settings.mobile');
+
+    // Sprint 68: messaging with his teachers only.
+    Route::get('/messages', [StudentMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{teacher}', [StudentMessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{teacher}', [StudentMessageController::class, 'store'])->name('messages.store');
+});
+
+// Sprint 68: Parent Access — dedicated guard, read-only.
+Route::middleware('guest:parent')->group(function () {
+    Route::get('/parent/login', [ParentAuthController::class, 'showLogin'])->name('parent.login');
+    Route::post('/parent/login', [ParentAuthController::class, 'login']);
+    Route::get('/parent/register', [ParentAuthController::class, 'showRegister'])->name('parent.register');
+    Route::post('/parent/register', [ParentAuthController::class, 'register']);
+});
+
+Route::middleware(['web', 'auth:parent'])->prefix('parent')->name('parent.')->group(function () {
+    Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/students/{student}', [ParentDashboardController::class, 'showStudent'])->name('student.show');
+    Route::post('/logout', [ParentAuthController::class, 'logout'])->name('logout');
+});
+
+// Sprint 68: 2FA challenge (between password check and full login).
+Route::middleware('guest')->group(function () {
+    Route::get('/two-factor-challenge', [TwoFactorController::class, 'showChallenge'])->name('two-factor.challenge');
+    Route::post('/two-factor-challenge', [TwoFactorController::class, 'verifyChallenge']);
 });
 
 Route::middleware('auth')->group(function () {

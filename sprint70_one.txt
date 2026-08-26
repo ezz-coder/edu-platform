@@ -1,0 +1,280 @@
+PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.30
+Configuration: C:\laragon\www\edu-platform\phpunit.xml
+
+[41;37mF[0m                                                                   1 / 1 (100%)
+
+Time: 01:04.560, Memory: 54.00 MB
+
+There was 1 failure:
+
+1) Tests\Feature\Sprint70FinalRuntimeSecurityQaTest::test_assistant_reservation_full_lifecycle_with_permissions_and_notifications
+Failed asserting that '<!DOCTYPE html>\n
+<html lang="ar" dir="rtl">\n
+    <head>\n
+        <meta charset="utf-8">\n
+        <meta name="viewport" content="width=device-width, initial-scale=1">\n
+        <meta name="csrf-token" content="dqTac0TZSyLnx4ukZilLrphSQ5HHgCgvFMOKvomo">\n
+\n
+        <title>الحجوزات - Laravel</title>\n
+\n
+        <!-- Fonts -->\n
+        <link rel="preconnect" href="https://fonts.googleapis.com">\n
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">\n
+        <!-- Bootstrap Icons -->\n
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">\n
+\n
+        <!-- Scripts -->\n
+        <link rel="preload" as="style" href="http://localhost/build/assets/app-ogZfspQw.css" /><link rel="modulepreload" as="script" href="http://localhost/build/assets/app-DgrZORNW.js" /><link rel="stylesheet" href="http://localhost/build/assets/app-ogZfspQw.css" /><script type="module" src="http://localhost/build/assets/app-DgrZORNW.js"></script>    </head>\n
+    <body>\n
+        <div class="min-h-screen flex">\n
+            <!-- Sidebar Overlay (mobile) -->\n
+            <div id="sidebar-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-200"></div>\n
+\n
+            <!-- Sidebar -->\n
+            <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-64 bg-bg-sidebar border-l border-border-light transform transition-all duration-200 lg:translate-x-0 translate-x-full lg:static lg:inset-0 flex flex-col">\n
+                <!-- Logo -->\n
+                <div class="flex items-center justify-center h-16 border-b border-border-light flex-shrink-0">\n
+                    <h1 class="text-2xl font-bold text-text-primary">بيان</h1>\n
+                </div>\n
+\n
+                <!-- Navigation -->\n
+                <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto scrollbar-thin">\n
+                                            <a class="sidebar-link" href="http://localhost/assistant/dashboard">\n
+    <i class="bi bi-speedometer2 text-lg"></i>\n
+                            <span>لوحة المساعد</span>\n
+</a>                                                                                                                                                                                                <a class="sidebar-link-active" href="http://localhost/assistant/reservations">\n
+    <i class="bi bi-calendar-check text-lg"></i>\n
+                            <span>الحجوزات</span>\n
+</a>                                                                        <a class="sidebar-link" href="http://localhost/assistant/notifications">\n
+    <i class="bi bi-bell text-lg"></i>\n
+                            <span>الإشعارات</span>\n
+</a>                        <a class="sidebar-link" href="http://localhost/assistant/profile">\n
+    <i class="bi bi-person text-lg"></i>\n
+                            <span>حسابي</span>\n
+</a>                                    </nav>\n
+\n
+                <!-- User Info -->\n
+                <div class="p-4 border-t border-border-light flex-shrink-0">\n
+                    <div class="flex items-center gap-3">\n
+                        <div class="w-10 h-10 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">\n
+                            a\n
+                        </div>\n
+                        <div class="flex-1 min-w-0">\n
+                            <p class="text-sm font-medium text-text-primary truncate">assistant_a</p>\n
+                            <p class="text-xs text-text-muted">مساعد</p>\n
+                        </div>\n
+                    </div>\n
+                </div>\n
+            </aside>\n
+\n
+            <!-- Main Content -->\n
+            <div class="flex-1 flex flex-col min-w-0">\n
+                <!-- Top Navigation -->\n
+                <header class="bg-bg-card border-b border-border-light sticky top-0 z-30">\n
+                    <div class="flex items-center justify-between px-4 lg:px-6 py-3">\n
+                        <!-- Mobile Menu Button -->\n
+                        <button id="mobile-menu-button" class="lg:hidden p-2 rounded-button text-text-secondary hover:bg-gray-100 transition-colors duration-150" aria-label="فتح القائمة">\n
+                            <i class="bi bi-list text-xl"></i>\n
+                        </button>\n
+\n
+                        <!-- Page Title (Mobile) -->\n
+                        <h2 class="text-lg font-semibold text-text-primary lg:hidden"></h2>\n
+\n
+                        <!-- Spacer (Desktop) -->\n
+                        <div class="hidden lg:block"></div>\n
+\n
+                        <!-- Notification bell + Logout -->\n
+                        <div class="flex items-center gap-2">\n
+                                                                                                <div class="dropdown relative">\r\n
+    <button type="button" class="btn-icon text-text-secondary hover:bg-gray-100 focus-ring transition-colors duration-150" data-bs-toggle="dropdown" aria-expanded="false" aria-label="الإشعارات">\r\n
+        <i class="bi bi-bell text-xl"></i>\r\n
+            </button>\r\n
+\r\n
+    <div class="dropdown-menu dropdown-menu-end p-0 shadow-dropdown card fade-in" style="width: 22rem; max-height: 30rem; overflow-y: auto;">\r\n
+        <div class="flex items-center justify-between px-4 py-3 border-b border-border-light sticky-top bg-bg-card">\r\n
+            <span class="font-semibold text-text-primary">الإشعارات</span>\r\n
+            <div class="flex items-center gap-3">\r\n
+                                <a href="http://localhost/assistant/notifications" class="text-sm text-primary-600 hover:text-primary-700 transition-colors duration-150 font-medium">عرض الكل</a>\r\n
+            </div>\r\n
+        </div>\r\n
+\r\n
+                    <div class="px-4 py-8 text-center text-sm text-text-muted">لا توجد إشعارات حالياً</div>\r\n
+            </div>\r\n
+</div>                                                                                                                                                            <form method="POST" action="http://localhost/logout" class="inline">\n
+                                        <input type="hidden" name="_token" value="dqTac0TZSyLnx4ukZilLrphSQ5HHgCgvFMOKvomo" autocomplete="off">                                        <button type="submit" class="btn-ghost btn-sm">\n
+                                            <i class="bi bi-box-arrow-right"></i>\n
+                                            <span class="hidden sm:inline">تسجيل الخروج</span>\n
+                                        </button>\n
+                                    </form>\n
+                                                                                    </div>\n
+                    </div>\n
+                </header>\n
+\n
+                <!-- Page Content -->\n
+                <main class="flex-1 p-4 lg:p-8 overflow-y-auto pb-28 lg:pb-8">\n
+                    <div class="page-header">\r\n
+        <div class="flex items-end justify-between flex-wrap gap-3">\r\n
+        <div>\r\n
+            <h1 class="page-title">الحجوزات</h1>\r\n
+                            <p class="page-description">كل الحجوزات التي أدارها المدرس</p>\r\n
+                    </div>\r\n
+                    <div class="flex gap-2"><a href='http://localhost/assistant/reservations/create' class='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium'><i class='bi bi-plus-lg'></i> حجز جديد</a></div>\r\n
+            </div>\r\n
+</div>\r\n
+            <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-lg text-sm">تم إلغاء الحجز بنجاح.</div>\r\n
+    \r\n
+    \r\n
+    \r\n
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-4">\r\n
+        <form method="GET" action="http://localhost/assistant/reservations" class="grid grid-cols-1 md:grid-cols-4 gap-4">\r\n
+            <div>\r\n
+                <label class="block text-sm font-medium text-gray-700 mb-1">بحث</label>\r\n
+                <input type="text" name="search" value="XYZUNIQUE" placeholder="بحث بالعنوان أو الوصف..." class="w-full border border-gray-300 rounded-lg px-3 py-2">\r\n
+            </div>\r\n
+            <div>\r\n
+                <label class="block text-sm font-medium text-gray-700 mb-1">النوع</label>\r\n
+                <select name="type" class="w-full border border-gray-300 rounded-lg px-3 py-2">\r\n
+                    <option value="">كل الأنواع</option>\r\n
+                                            <option value="printed_notes" >ملاحظات مطبوعة</option>\r\n
+                                            <option value="books" >كتب</option>\r\n
+                                            <option value="booklets" >بوكليت</option>\r\n
+                                            <option value="practice_sheets" >أوراق تدريب</option>\r\n
+                                            <option value="external_material" >مادة خارجية</option>\r\n
+                                            <option value="other" >أخرى</option>\r\n
+                                    </select>\r\n
+            </div>\r\n
+            <div>\r\n
+                <label class="block text-sm font-medium text-gray-700 mb-1">الحالة</label>\r\n
+                <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2">\r\n
+                    <option value="">كل الحالات</option>\r\n
+                    <option value="draft" >مسودة</option>\r\n
+                    <option value="open" >مفتوح</option>\r\n
+                    <option value="closed" >مغلق</option>\r\n
+                    <option value="archived" >مؤرشف</option>\r\n
+                </select>\r\n
+            </div>\r\n
+            <div class="flex items-end gap-2">\r\n
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">فلتر</button>\r\n
+                <a href="http://localhost/assistant/reservations" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">إلغاء</a>\r\n
+            </div>\r\n
+        </form>\r\n
+    </div>\r\n
+\r\n
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">\r\n
+        <table class="w-full text-sm text-right">\r\n
+            <thead class="bg-gray-50 text-gray-600">\r\n
+                <tr>\r\n
+                    <th class="px-4 py-3">العنوان</th>\r\n
+                    <th class="px-4 py-3">النوع</th>\r\n
+                    <th class="px-4 py-3">المجموعات</th>\r\n
+                    <th class="px-4 py-3">الحالة</th>\r\n
+                    <th class="px-4 py-3">الكمية</th>\r\n
+                    <th class="px-4 py-3">المحجوز</th>\r\n
+                    <th class="px-4 py-3">المتبقي</th>\r\n
+                    <th class="px-4 py-3">تسليم</th>\r\n
+                    <th class="px-4 py-3">إجراءات</th>\r\n
+                </tr>\r\n
+            </thead>\r\n
+            <tbody class="divide-y divide-gray-100">\r\n
+                                    <tr>\r\n
+                        <td colspan="9" class="px-4 py-8">\r\n
+                            <div class="empty-state">\r\n
+    <div class="empty-state-icon">\r\n
+        <i class="bi bi-calendar-event"></i>\r\n
+    </div>\r\n
+    <h3 class="empty-state-title">لا توجد حجوزات بعد</h3>\r\n
+            <p class="empty-state-message">افتح أول حجز لطلابك.</p>\r\n
+                <div class="mt-6"><a href='http://localhost/assistant/reservations/create' class='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium'><i class='bi bi-plus-lg'></i> حجز جديد</a></div>\r\n
+    </div>                        </td>\r\n
+                    </tr>\r\n
+                            </tbody>\r\n
+        </table>\r\n
+    </div>\n
+                </main>\n
+            </div>\n
+        </div>\n
+\n
+        <!-- Bottom Navigation (Mobile) -->\n
+                        <nav class="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-bg-card border-t border-border-light flex justify-around items-center py-2 shadow-dropdown">\n
+            <a href="http://localhost/assistant/dashboard" class="flex flex-col items-center gap-0.5 text-xs text-text-muted transition-colors duration-150">\n
+                <i class="bi bi-speedometer2 text-xl"></i><span>الرئيسية</span>\n
+            </a>\n
+                        <a href="http://localhost/assistant/notifications" class="flex flex-col items-center gap-0.5 text-xs text-text-muted transition-colors duration-150">\n
+                <i class="bi bi-bell text-xl"></i><span>الإشعارات</span>\n
+            </a>\n
+            <a href="http://localhost/assistant/profile" class="flex flex-col items-center gap-0.5 text-xs text-text-muted transition-colors duration-150">\n
+                <i class="bi bi-person text-xl"></i><span>حسابي</span>\n
+            </a>\n
+        </nav>\n
+                \n
+        <script>\n
+            function copyTeacherCode() {\n
+                const code = document.getElementById('teacher-code');\n
+                if (code) {\n
+                    navigator.clipboard.writeText(code.textContent.trim()).then(() => {\n
+                        const btn = document.querySelector('[onclick="copyTeacherCode()"]');\n
+                        if (btn) {\n
+                            const original = btn.innerHTML;\n
+                            btn.innerHTML = '<i class="bi bi-check-lg"></i> تم النسخ';\n
+                            setTimeout(() => btn.innerHTML = original, 2000);\n
+                        }\n
+                    });\n
+                }\n
+            }\n
+\n
+            const mobileMenuButton = document.getElementById('mobile-menu-button');\n
+            const sidebar = document.getElementById('sidebar');\n
+            const sidebarOverlay = document.getElementById('sidebar-overlay');\n
+\n
+            function toggleSidebar() {\n
+                sidebar.classList.toggle('translate-x-full');\n
+                sidebarOverlay.classList.toggle('hidden');\n
+            }\n
+\n
+            if (mobileMenuButton) {\n
+                mobileMenuButton.addEventListener('click', toggleSidebar);\n
+            }\n
+            if (sidebarOverlay) {\n
+                sidebarOverlay.addEventListener('click', toggleSidebar);\n
+            }\n
+        </script>\n
+\n
+        <!-- Toast container -->\r\n
+<div id="toast-container" class="toast"></div>\r\n
+\r\n
+<script>\r\n
+    function showToast(message, type = 'success') {\r\n
+        const colors = { success: 'toast-success', error: 'toast-error', info: 'toast-info', warning: 'toast-warning' };\r\n
+        const icons = { success: 'bi-check-circle-fill', error: 'bi-x-circle-fill', info: 'bi-info-circle-fill', warning: 'bi-exclamation-triangle-fill' };\r\n
+        const el = document.createElement('div');\r\n
+        el.className = (colors[type] || colors.success) + ' fade-in';\r\n
+        el.innerHTML = '<i class="bi ' + (icons[type] || icons.success) + '"></i><span>' + message + '</span>';\r\n
+        document.getElementById('toast-container').appendChild(el);\r\n
+        setTimeout(function () { el.style.opacity = '0'; el.style.transform = 'translateY(-8px)'; setTimeout(function () { el.remove(); }, 200); }, 3500);\r\n
+    }\r\n
+     window.addEventListener('DOMContentLoaded', function () { showToast('تم إلغاء الحجز بنجاح.', 'success'); });             </script>\r\n
+\r\n
+<script>\r\n
+    // Prevent double submit + spinner\r\n
+    document.addEventListener('submit', function (e) {\r\n
+        const form = e.target;\r\n
+        if (form.dataset.locked) { e.preventDefault(); return; }\r\n
+        form.dataset.locked = '1';\r\n
+        const btn = form.querySelector('button[type="submit"]');\r\n
+        if (btn) {\r\n
+            btn.disabled = true;\r\n
+            const original = btn.innerHTML;\r\n
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> جارٍ التنفيذ...';\r\n
+            setTimeout(function () { btn.disabled = false; btn.innerHTML = original; }, 4000);\r\n
+        }\r\n
+    });\r\n
+</script>    </body>\n
+</html>' [UTF-8](length: 16094) does not contain "XYZUNIQUE" [ASCII](length: 9).
+
+C:\laragon\www\edu-platform\tests\Feature\Sprint70FinalRuntimeSecurityQaTest.php:527
+
+[37;41mFAILURES![0m
+[37;41mTests: 1[0m[37;41m, Assertions: 21[0m[37;41m, Failures: 1[0m[37;41m.[0m

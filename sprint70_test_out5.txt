@@ -1,0 +1,23 @@
+PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.30
+Configuration: C:\laragon\www\edu-platform\phpunit.xml
+
+...............[41;37mF[0m...............                                   31 / 31 (100%)
+
+Time: 01:06.998, Memory: 62.00 MB
+
+There was 1 failure:
+
+1) Tests\Feature\Sprint70FinalRuntimeSecurityQaTest::test_assistant_qr_attendance_full_cycle
+Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-'absent'
++'present'
+
+C:\laragon\www\edu-platform\tests\Feature\Sprint70FinalRuntimeSecurityQaTest.php:633
+
+[37;41mFAILURES![0m
+[37;41mTests: 31[0m[37;41m, Assertions: 192[0m[37;41m, Failures: 1[0m[37;41m.[0m

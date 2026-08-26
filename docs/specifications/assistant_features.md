@@ -854,3 +854,26 @@ This document is the **official QA reference** for the Assistant module.
 All browser QA MUST depend on this file.
 
 Every feature is documented with its current implementation status and its official required behavior.
+
+---
+
+# SPRINT 71 FINAL SIGN-OFF UPDATE (2026-08-26)
+
+هذا القسم يحدّث حالة المواصفة لتطابق الحالة النهائية للإصدار BAYAN v1.0.0:
+
+| Feature | الحالة النهائية | الدليل |
+|---|---|---|
+| Assistant Login/Logout (guard `assistant`) | COMPLETE — RUNTIME VERIFIED | Sprints 37–40, 70 |
+| Dashboard + permission-gated navigation | COMPLETE — RUNTIME VERIFIED | Sprint 64 |
+| Profile (edit name/username/password) | COMPLETE — RUNTIME VERIFIED | Sprint 42 |
+| Groups / Students / Lessons (حسب الصلاحيات) | COMPLETE — RUNTIME VERIFIED | Sprints 40/45/64 |
+| Attendance QR (create/scan/close/reopen/correct) | COMPLETE — RUNTIME VERIFIED | Sprint 70 (BUG E fixed) |
+| Resources (upload/edit/delete/download) | COMPLETE — RUNTIME VERIFIED | Sprints 43/44 |
+| Reservations (create/open/deliver/undo/close) | COMPLETE — RUNTIME VERIFIED | Sprints 46/70 |
+| Exams + Question Bank (`can_manage_exams`) | COMPLETE — RUNTIME VERIFIED | Sprints 41/70 |
+| Grades (`can_manage_grades` — أُضيف للـDB في migration 2026_08_24) | COMPLETE — RUNTIME VERIFIED | Sprint 61/70 |
+| Permission isolation (403 فوري عند سحب الصلاحية) | COMPLETE — RUNTIME VERIFIED | Sprint 70 security matrix |
+
+ملاحظة: حقل `can_manage_grades` المشار إليه أعلاه بـ "NOT IN DB" أصبح موجوداً فعلياً عبر
+`database/migrations/2026_08_24_000001_add_can_manage_grades_to_assistant_permissions.php`.
+لا توجد Regression معروفة تمنع الاستخدام.

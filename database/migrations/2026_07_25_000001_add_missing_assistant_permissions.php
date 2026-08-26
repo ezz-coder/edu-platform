@@ -16,10 +16,18 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Sprint 63 fix: guard against columns that already exist (fresh migrations
+        // create them in the assistants tables migration), which broke migrate:fresh.
         Schema::table('assistant_permissions', function (Blueprint $table) {
-            $table->boolean('can_manage_lessons')->default(false)->after('can_view_groups');
-            $table->boolean('can_manage_exams')->default(false)->after('can_manage_lessons');
-            $table->boolean('can_manage_grades')->default(false)->after('can_manage_exams');
+            if (! Schema::hasColumn('assistant_permissions', 'can_manage_lessons')) {
+                $table->boolean('can_manage_lessons')->default(false)->after('can_view_groups');
+            }
+            if (! Schema::hasColumn('assistant_permissions', 'can_manage_exams')) {
+                $table->boolean('can_manage_exams')->default(false)->after('can_manage_lessons');
+            }
+            if (! Schema::hasColumn('assistant_permissions', 'can_manage_grades')) {
+                $table->boolean('can_manage_grades')->default(false)->after('can_manage_exams');
+            }
         });
     }
 

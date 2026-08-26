@@ -79,6 +79,40 @@ class NotificationHelper
     }
 
     /**
+     * Sprint 65 — Notify enrolled students of a group when a new lesson is created.
+     * Only students actively enrolled in the lesson's group are notified.
+     */
+    public static function notifyNewLesson(\App\Models\Lesson $lesson): void
+    {
+        $studentIds = self::groupStudentIds([$lesson->group_id]);
+
+        self::notifyStudents(
+            $lesson->teacher_id,
+            $studentIds,
+            'lesson',
+            'درس جديد',
+            "تم إضافة درس جديد: {$lesson->title}",
+            route('student.resources.home')
+        );
+    }
+
+    /**
+     * Sprint 65 — Notify the affected student only when his grade is edited.
+     * Deduplication (same unread type+title) prevents duplicate notifications.
+     */
+    public static function notifyGradeUpdatedToStudent(\App\Models\ExamAttempt $attempt): void
+    {
+        self::notifyStudents(
+            $attempt->exam->teacher_id,
+            [$attempt->student_id],
+            'grade_updated',
+            "تعديل درجة: {$attempt->exam->title}",
+            "تم تعديل درجتك في امتحان {$attempt->exam->title} إلى {$attempt->score}/{$attempt->total_marks}.",
+            route('student.grades')
+        );
+    }
+
+    /**
      * One notification for the teacher (smart, not spammy).
      */
     public static function notifyTeacher(

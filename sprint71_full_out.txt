@@ -1,0 +1,481 @@
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+   FAIL  Tests\Feature\Auth\AuthenticationTest
+  ✓ login screen can be rendered                                                                                 4.68s  
+  ⨯ users can authenticate using the login screen                                                                1.67s  
+  ✓ users can not authenticate with invalid password                                                             0.16s  
+  ✓ users can logout                                                                                             0.23s  
+
+   FAIL  Tests\Feature\Auth\EmailVerificationTest
+  ✓ email verification screen can be rendered                                                                    0.20s  
+  ⨯ email can be verified                                                                                        1.61s  
+  ✓ email is not verified with invalid hash                                                                      1.28s  
+
+   PASS  Tests\Feature\Auth\PasswordConfirmationTest
+  ✓ confirm password screen can be rendered                                                                      0.61s  
+  ✓ password can be confirmed                                                                                    0.06s  
+  ✓ password is not confirmed with invalid password                                                              0.37s  
+
+   PASS  Tests\Feature\Auth\PasswordResetTest
+  ✓ reset password link screen can be rendered                                                                   0.12s  
+  ✓ reset password link can be requested                                                                         1.84s  
+  ✓ reset password screen can be rendered                                                                        0.34s  
+  ✓ password can be reset with valid token                                                                       0.40s  
+
+   PASS  Tests\Feature\Auth\PasswordUpdateTest
+  ✓ password can be updated                                                                                      0.09s  
+  ✓ correct password must be provided to update password                                                         0.06s  
+
+   FAIL  Tests\Feature\Auth\RegistrationTest
+  ✓ registration screen can be rendered                                                                          0.11s  
+  ⨯ new users can register                                                                                       0.07s  
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                                                                0.09s  
+
+   PASS  Tests\Feature\ProfileTest
+  ✓ profile page is displayed                                                                                    0.31s  
+  ✓ profile information can be updated                                                                           0.17s  
+  ✓ email verification status is unchanged when the email address is unchanged                                   0.06s  
+  ✓ user can delete their account                                                                                0.06s  
+  ✓ correct password must be provided to delete account                                                          0.07s  
+
+   FAIL  Tests\Feature\Sprint30AuditTest
+  ⨯ public pages
+  ⨯ admin login
+  ⨯ teacher login
+  ⨯ student login
+  ⨯ admin pages
+  ⨯ teacher pages
+  ⨯ student pages
+  ⨯ assistant pages
+  ⨯ guest access restriction
+  ⨯ logout
+
+   PASS  Tests\Feature\Sprint63StudentReservationsResourcesTest
+  ✓ student can cancel own reservation and quantity is restored                                                  0.69s  
+  ✓ cancelling unlimited reservation does not change status and notifies once                                    0.11s  
+  ✓ student cannot cancel another students reservation                                                           0.07s  
+  ✓ invalid reservation item id returns 404                                                                      0.29s  
+  ✓ delivered reservation cannot be cancelled                                                                    0.07s  
+  ✓ double cancel is rejected without duplicate notification                                                     0.08s  
+  ✓ student can re reserve after cancelling                                                                      0.12s  
+  ✓ search by title matches only matching resources                                                              0.77s  
+  ✓ search with non matching query returns empty results                                                         0.14s  
+  ✓ empty query shows all visible resources                                                                      0.25s  
+  ✓ filter by type                                                                                               0.34s  
+  ✓ filter by publish date range                                                                                 0.34s  
+  ✓ filters do not expose invisible or untargeted resources                                                      0.22s  
+  ✓ direct download of allowed file resource                                                                     1.14s  
+  ✓ download denied for invisible resource                                                                       0.18s  
+  ✓ download denied for expired resource                                                                         0.16s  
+  ✓ download denied for untargeted resource                                                                      0.24s  
+  ✓ non file resource is not treated as downloadable                                                             0.17s  
+  ✓ guest cannot access download                                                                                 0.17s  
+
+   PASS  Tests\Feature\Sprint64AssistantDashboardPermissionsTest
+  ✓ full permissions shows all cards and no fallback                                                             0.58s  
+  ✓ no permissions shows fallback only                                                                           0.21s  
+  ✓ single permission lessons only                                                                               0.32s  
+  ✓ multiple selective permissions                                                                               0.45s  
+  ✓ revoke permission hides card and blocks direct url                                                           0.46s  
+
+   PASS  Tests\Feature\Sprint65StudentNotificationsAccountTest
+  ✓ teacher creating lesson notifies targeted students only                                                      0.50s  
+  ✓ assistant creating lesson notifies students of teachers group                                                0.30s  
+  ✓ teacher editing grade notifies only affected student                                                         0.24s  
+  ✓ assistant editing grade notifies student and keeps teacher notification                                      0.09s  
+  ✓ settings page loads for student                                                                              0.21s  
+  ✓ student can change mobile validly and it persists                                                            0.30s  
+  ✓ invalid mobile is rejected                                                                                   0.28s  
+  ✓ duplicate mobile owned by other family is rejected                                                           0.21s  
+  ✓ mobile change updates all sibling accounts and switching still works                                         0.35s  
+  ✓ grades page shows own grades only                                                                            1.21s  
+  ✓ grades page orders latest first and excludes unfinished                                                      0.17s  
+  ✓ attendance page shows own records with correct totals                                                        1.36s  
+  ✓ attendance page counts late and absent                                                                       0.14s  
+  ✓ guest cannot access new pages                                                                                0.08s  
+
+   PASS  Tests\Feature\Sprint66TeacherReportsExportImportTest
+  ✓ teacher can open reports page                                                                                0.71s  
+  ✓ report shows correct attendance and grades data                                                              0.13s  
+  ✓ report group filter excludes other groups data                                                               0.11s  
+  ✓ report date filter limits sessions                                                                           0.10s  
+  ✓ teacher cannot see other teachers data in reports                                                            0.10s  
+  ✓ student and guest cannot access reports                                                                      0.09s  
+  ✓ export produces csv with correct values                                                                      0.72s  
+  ✓ export respects ownership                                                                                    0.12s  
+  ✓ export contains no out of scope students                                                                     0.16s  
+  ✓ import valid file creates students                                                                           2.28s  
+  ✓ import rejects invalid row with clear reason                                                                 0.34s  
+  ✓ import rejects duplicate mobile in same group                                                                0.17s  
+  ✓ import rejects invalid mobile                                                                                0.12s  
+  ✓ import rejects wrong group ownership                                                                         0.11s  
+  ✓ import empty file shows error                                                                                0.10s  
+  ✓ import unsupported file type is rejected                                                                     0.11s  
+  ✓ import mixed file processes valid and documents invalid                                                      0.21s  
+  ✓ import xlsx file creates students                                                                            0.35s  
+  ✓ import capacity limit is enforced                                                                            0.18s  
+  ✓ student cannot access import                                                                                 0.09s  
+
+   PASS  Tests\Feature\Sprint67TeacherProductivitySearchTest
+  ✓ search by name returns matching students                                                                     0.30s  
+  ✓ search with no results shows empty state                                                                     0.26s  
+  ✓ advanced filter by grade level                                                                               0.15s  
+  ✓ advanced filter by gender type                                                                               0.15s  
+  ✓ search never exposes other teachers students                                                                 0.12s  
+  ✓ bulk create page opens                                                                                       0.17s  
+  ✓ valid bulk creation preserves display order                                                                  0.19s  
+  ✓ bulk rejects duplicate title within submission                                                               0.08s  
+  ✓ bulk rejects conflict with existing lesson                                                                   0.09s  
+  ✓ bulk requires at least one title                                                                             0.08s  
+  ✓ bulk enforces group ownership                                                                                0.08s  
+  ✓ student cannot access bulk create                                                                            0.08s  
+  ✓ calendar page opens and shows group schedule                                                                 1.51s  
+  ✓ calendar shows attendance sessions on correct dates                                                          0.11s  
+  ✓ calendar shows exams                                                                                         0.31s  
+  ✓ calendar group filter works                                                                                  0.12s  
+  ✓ calendar hides other teachers data                                                                           0.11s  
+  ✓ calendar rejects other teachers group filter                                                                 0.12s  
+  ✓ guest cannot open calendar                                                                                   0.13s  
+  ✓ progress shows correct calculations for selected group                                                       1.22s  
+  ✓ progress student detail scope is correct                                                                     0.11s  
+  ✓ progress never shows other teachers students                                                                 0.10s  
+  ✓ progress rejects other teachers group                                                                        0.07s  
+  ✓ running attempts are not counted as progress                                                                 0.12s  
+  ✓ settings page opens                                                                                          0.31s  
+  ✓ settings password change saves and persists                                                                  0.08s  
+  ✓ settings password change validates current password                                                          0.08s  
+  ✓ settings password change validates confirmation                                                              0.09s  
+  ✓ student cannot open teacher settings                                                                         0.07s  
+
+   PASS  Tests\Feature\Sprint68CommunicationParent2FATest
+  ✓ teacher can send message to enrolled student                                                                 0.28s  
+  ✓ student receives message and notification                                                                    0.32s  
+  ✓ read unread state works                                                                                     16.89s  
+  ✓ student cannot access other students thread                                                                  0.09s  
+  ✓ teacher cannot message student of another teacher                                                            0.08s  
+  ✓ guest and assistant cannot access messaging                                                                  0.08s  
+  ✓ teacher creates announcement with targets                                                                    0.29s  
+  ✓ targeted students see announcement others do not                                                             0.26s  
+  ✓ announcement edit and delete by owner only                                                                   0.09s  
+  ✓ announcement produces notifications for targeted students                                                    0.07s  
+  ✓ teacher cannot target groups he does not own                                                                 0.13s  
+  ✓ parent can register and is linked to children                                                                0.17s  
+  ✓ parent registration requires linked student                                                                  0.07s  
+  ✓ parent can login and view child data                                                                         0.14s  
+  ✓ wrong parent credentials rejected                                                                            0.07s  
+  ✓ parent cannot view unrelated student                                                                         0.08s  
+  ✓ parent cannot access teacher or assistant areas                                                              0.12s  
+  ✓ parent views are read only                                                                                   0.07s  
+  ✓ teacher can enable 2fa with password                                                                         0.09s  
+  ✓ enable requires correct password                                                                             0.08s  
+  ✓ login with 2fa issues otp challenge                                                                          0.38s  
+  ✓ correct otp completes login                                                                                  0.08s  
+  ✓ wrong otp rejected                                                                                           0.59s  
+  ✓ challenge requires pending session                                                                           0.08s  
+  ✓ disable 2fa restores normal login                                                                            0.08s  
+  ✓ student login is not affected by 2fa                                                                         0.11s  
+  ✓ non teachers cannot toggle 2fa routes                                                                        0.08s  
+
+   PASS  Tests\Feature\Sprint69StudentDashboardGroupsTest
+  ✓ guest is rejected from dashboard                                                                             0.11s  
+  ✓ authenticated student gets dashboard with content                                                            0.13s  
+  ✓ dashboard uses active account                                                                                0.11s  
+  ✓ announcement visible only to targeted student                                                                0.15s  
+  ✓ unread notifications are scoped to active account                                                            0.11s  
+  ✓ groups index shows only active groups                                                                        0.14s  
+  ✓ groups stage filter                                                                                          0.10s  
+  ✓ groups gender filter                                                                                         0.10s  
+  ✓ groups combined stage and gender filter                                                                      0.10s  
+
+   PASS  Tests\Feature\Sprint70FinalRuntimeSecurityQaTest
+  ✓ term end execute then undo rolls back state                                                                  0.23s  
+  ✓ term undo is blocked after new work started                                                                  0.11s  
+  ✓ drag and drop reorder persists after refresh                                                                 0.09s  
+  ✓ reorder cannot touch other teachers lessons                                                                  0.09s  
+  ✓ reset attempt deletes attempt and allows retake                                                              0.20s  
+  ✓ exam archive restore within 7 days force delete only after                                                   0.17s  
+  ✓ student sees only targeted visible exam                                                                      0.14s  
+  ✓ full student exam flow single attempt autosave submit grade notify                                           0.34s  
+  ✓ student leave cancels attempt and blocks reentry                                                             0.13s  
+  ✓ review respects allow review flag                                                                            0.14s  
+  ✓ student cannot access another students attempt                                                               0.10s  
+  ✓ student resource visibility targeting expiry and scope isolation                                             0.15s  
+  ✓ assistant reservation full lifecycle with permissions and notifications                                      0.22s  
+  ✓ assistant without permission gets 403 immediately                                                            0.12s  
+  ✓ assistant cannot access other assistants teacher data                                                        0.10s  
+  ✓ assistant qr attendance full cycle                                                                           0.16s  
+  ✓ assistant cannot open session for other teachers group                                                       0.10s  
+  ✓ assistant grade edit notifies teacher and student                                                            0.09s  
+  ✓ assistant without grades permission cannot edit grades                                                       0.09s  
+  ✓ teacher publishing exam notifies targeted students only                                                      0.09s  
+  ✓ teacher a cannot access teacher b resources                                                                  0.13s  
+  ✓ student notifications are isolated                                                                           0.17s  
+  ✓ role middleware blocks cross role access                                                                     0.12s  
+  ✓ login redirects by role and logout works                                                                     0.14s  
+  ✓ student login redirects to dashboard                                                                         0.15s  
+  ✓ assistant login logout flow                                                                                  0.11s  
+  ✓ inactive assistant cannot login                                                                              0.10s  
+  ✓ auth entry page accessible for guests                                                                        0.70s  
+  ✓ smoke teacher main pages                                                                                     1.69s  
+  ✓ smoke assistant main pages                                                                                   1.14s  
+  ✓ smoke student main pages                                                                                     0.85s  
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Auth\AuthenticationTest > users can authenticate using the login screen                        
+  The user is not authenticated
+Failed asserting that false is true.
+
+  at tests\Feature\Auth\AuthenticationTest.php:29
+     25▕             'email' => $user->email,
+     26▕             'password' => 'password',
+     27▕         ]);
+     28▕ 
+  ➜  29▕         $this->assertAuthenticated();
+     30▕         $response->assertRedirect(route('dashboard', absolute: false));
+     31▕     }
+     32▕ 
+     33▕     public function test_users_can_not_authenticate_with_invalid_password(): void
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Auth\EmailVerificationTest > email can be verified                    RouteNotFoundException   
+  Route [dashboard] not defined.
+
+  at vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:546
+    542▕             ! is_null($url = call_user_func($this->missingNamedRouteResolver, $name, $parameters, $absolute))) {
+    543▕             return $url;
+    544▕         }
+    545▕ 
+  ➜ 546▕         throw new RouteNotFoundException("Route [{$name}] not defined.");
+    547▕     }
+    548▕ 
+    549▕     /**
+    550▕      * Get the URL for a given route instance.
+
+  1   vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:546
+  2   vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:870
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Auth\RegistrationTest > new users can register                        RouteNotFoundException   
+  Route [dashboard] not defined.
+
+  at vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:546
+    542▕             ! is_null($url = call_user_func($this->missingNamedRouteResolver, $name, $parameters, $absolute))) {
+    543▕             return $url;
+    544▕         }
+    545▕ 
+  ➜ 546▕         throw new RouteNotFoundException("Route [{$name}] not defined.");
+    547▕     }
+    548▕ 
+    549▕     /**
+    550▕      * Get the URL for a given route instance.
+
+  1   vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:546
+  2   vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:870
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > public pages                                              QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > admin login                                               QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > teacher login                                             QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > student login                                             QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > admin pages                                               QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > teacher pages                                             QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > student pages                                             QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > assistant pages                                           QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > guest access restriction                                  QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sprint30AuditTest > logout                                                    QueryException   
+  SQLSTATE[HY000]: General error: 1 no such table: users (Connection: sqlite, Database: :memory:, SQL: select * from "users" where "role" = admin limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:857
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:435
+      NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1 no such table: users")
+
+
+  Tests:    13 failed, 176 passed (647 assertions)
+  Duration: 78.75s
+

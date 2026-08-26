@@ -1035,3 +1035,24 @@
 
 # مكان ملف المواصفات النهائي
 docs/specifications/student_features.md
+
+---
+
+# SPRINT 71 FINAL SIGN-OFF UPDATE (2026-08-26)
+
+هذا القسم يحدّث حالة المواصفة لتطابق الحالة النهائية للإصدار BAYAN v1.0.0.
+الأقسام 18/19/20 أعلاه كانت مكتوبة قبل Sprints 61–70 وهي الآن قديمة. الحالة النهائية:
+
+| Feature سابقة "Missing/Partial" | الحالة النهائية | الدليل |
+|---|---|---|
+| صفحة Grades منفصلة (`student.grades`) | COMPLETE — RUNTIME VERIFIED | Sprint 65 tests + runtime |
+| صفحة Attendance منفصلة (`student.attendance`) مع نسبة مئوية وسجل تفصيلي | COMPLETE — RUNTIME VERIFIED | Sprint 65 |
+| إلغاء الحجز من الطالب + إشعار المدرس | COMPLETE — RUNTIME VERIFIED | Sprint 63 (cancel + notification) |
+| Student Settings + تغيير رقم الهاتف | COMPLETE — RUNTIME VERIFIED | Sprint 65 (`student.settings`, `updateMobile`) |
+| الإشعارات التلقائية (مورد/درس/امتحان/تعديل درجة/حجز) | COMPLETE — RUNTIME VERIFIED | Sprints 63/65/70 (NotificationHelper dedupe) |
+| البحث والفلترة في الموارد | COMPLETE — RUNTIME VERIFIED | Sprint 63 |
+| مراجعة المحاولات السابقة (review بعد الانتهاء حسب `allow_review_after_finish`) | COMPLETE — RUNTIME VERIFIED | Sprint 70 |
+| Dashboard يعرض أحدث المحتوى (موارد، دروس، امتحانات، إشعارات) | COMPLETE — RUNTIME VERIFIED | Sprint 69 |
+
+قواعد الأعمال 1–49 في القسم 16 كلها مطبقة ومُختبرة (Sprints 63–70 suites).
+القيود: لا توجد Regression معروفة تمنع الاستخدام. أي بند غير مذكور هنا يبقى كما هو موصوف أعلاه.

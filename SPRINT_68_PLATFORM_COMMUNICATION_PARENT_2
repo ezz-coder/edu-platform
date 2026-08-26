@@ -1,0 +1,138 @@
+# SPRINT 68 — Platform Communication, Parent Access & 2FA Report
+
+## 1. Scope
+- Messaging System
+- Announcements Module
+- Parent Access
+- Two-Factor Authentication
+
+No Sprint 69/70/71 features were touched.
+
+## 2. Source of Truth
+- docs/specifications/teacher_features.md
+- docs/specifications/student_features.md
+- docs/specifications/assistant_features.md
+- docs/specifications/shared_workflows.md
+
+Extracted rules applied:
+- Messaging: Teacher ↔ his enrolled students only, 1-to-1 threads per teacher-student pair, read/unread state, notification on new message. Assistant & Parent have no messaging access.
+- Announcements: Teacher creates/edits/deletes own announcements targeted to his groups only; published_at gate; visible on Student Dashboard for enrolled students of targeted groups; produces notifications for targeted students only.
+- Parent Access: real Parent account (mobile + password) linked automatically to students whose `parent_mobile` matches; registration requires ≥1 linked student; strictly read-only (profile + child student data); separate `parent` guard.
+- 2FA: Email OTP for teachers only. Enable/disable from teacher settings with current-password confirmation. OTP hashed in cache (10 min TTL), sent by email, never logged or shown in UI. Challenge screen between password and session.
+
+## 3. Existing Functionality Preserved
+- Teacher/Student/Assistant login flows unchanged (students skip 2FA entirely).
+- Existing notification infrastructure (`NotificationHelper`, `notifications` table) reused — no new notification system.
+- All prior sprint feature tests still pass except 4 pre-existing legacy failures (see §12).
+
+## 4. Messaging
+- Tables: `messages` (teacher_id, student_id, sender_type enum teacher|student, body, read_at).
+- Routes: teacher.messages.index/show/store, student.messages.index/show/store.
+- Authorization: teacher can only message/view students enrolled in his groups; student can only access threads with teachers he is enrolled under; guests redirected; assistant/parent blocked.
+- Read/unread: opening a thread marks incoming messages read; unread counts shown in lists.
+- Notification of type `message` created for the recipient on each new message.
+
+## 5. Announcements
+- Tables: `announcements` (teacher_id, title, body, published_at), pivot `announcement_targets` (announcement_id, group_id).
+- Teacher CRUD limited to own announcements; targeting validated against owned groups only (validation error otherwise).
+- Visibility: Student Dashboard shows published announcements of groups the student is enrolled in; non-targeted students never see them.
+- Notifications type `announcement` created for all targeted students on create/edit retarget.
+
+## 6. Parent Access
+- Table `parents` (name, mobile unique, password hashed, status) + `parent` auth guard in config/auth.php.
+- Register: mobile must match ≥1 student's `parent_mobile`; auto-links to all matching students.
+- Login: dedicated `/parent/login` with mobile+password; wrong credentials rejected with error.
+- Dashboard: list of children; per-child page shows profile, attendance summary, grades summary, upcoming lessons, recent resources, notifications — all read-only.
+- Security: parent cannot view unrelated students (403), cannot reach teacher/assistant/admin areas (403/redirect). Only write route is logout.
+
+## 7. Two-Factor Authentication
+- Type: Email OTP (6 digits), teachers only.
+- Enable/Disable: POST teacher.two-factor.enable|disable requiring `current_password`; toggle stored on users.two_factor_enabled (boolean cast).
+- Login challenge: after correct password, if two_factor_enabled → OTP issued (hashed in cache 10 min), redirect to /two-factor/challenge; guest until verified.
+- Correct OTP → full login + session regenerate. Wrong/expired OTP → error, session cleared, must re-login.
+- No backup codes (not required by spec). Secrets hashed; nothing logged; OTP not exposed in UI.
+
+## 8. Bugs Found & Fixed
+| Bug | Root Cause | Fix |
+|---|---|---|
+| 500 on announcement create (pivot insert) | `Announcement::groups()` used default pivot key `study_group_id` while migration used `group_id` | Explicit keys in belongsToMany |
+| 500 on parent register/login | Missing `use App\Http\Controllers\Controller` import in ParentAuthController | Added import |
+| two_factor_enabled returned int 0/1 | Missing boolean cast on User model | Added cast |
+| OTP test could not capture code | Mail::raw content not inspectable via MailFake | Refactored send to `TwoFactorCode` mailable with public `$code` |
+
+## 9. Root Causes Summary
+All four bugs were implementation-level mismatches between migration schema/model definitions and Laravel conventions; no architectural changes required.
+
+## 10. Files Modified / Created
+Migrations:
+- database/migrations/2026_08_26_000001_create_messages_table.php
+- database/migrations/2026_08_26_000002_create_announcements_tables.php
+- database/migrations/2026_08_26_000003_create_parents_table.php
+- database/migrations/2026_08_26_000004_add_two_factor_to_users_table.php
+
+Models:
+- app/Models/Message.php, Announcement.php, ParentAccount.php (new)
+- app/Models/User.php (two_factor_enabled fillable + boolean cast)
+
+Controllers:
+- app/Http/Controllers/TeacherMessageController.php, StudentMessageController.php, TeacherAnnouncementController.php, ParentDashboardController.php (new)
+- app/Http/Controllers/Auth/ParentAuthController.php, TwoFactorController.php (new)
+- app/Http/Controllers/Auth/AuthenticatedSessionController.php (2FA branch after password check)
+
+Mail:
+- app/Mail/TwoFactorCode.php, resources/views/emails/two-factor-code.blade.php
+
+Config/Routes:
+- config/auth.php (parent guard/provider)
+- routes/web.php (messaging, announcements, parent, 2FA routes)
+
+Views:
+- teacher/messages/{index,show}, student/messages/{index,show}
+- teacher/announcements/{index,create,edit}
+- parent/{login,register,dashboard,student}
+- auth/two-factor-challenge
+- teacher/settings/index.blade.php (2FA enable/disable UI)
+- components/dashboard-layout.blade.php (nav links)
+
+Tests:
+- tests/Feature/Sprint68CommunicationParent2FATest.php (27 tests)
+
+## 11. Tests
+27/27 passing (91 assertions):
+- Messaging (6): send, receive+notification, read/unread, cross-student block, cross-teacher block, guest block.
+- Announcements (5): create+targets, targeted visibility vs non-targeted, owner-only edit/delete, notifications targeted-only, foreign-group validation.
+- Parent (7): register+auto-link, link-required validation, login+child data, wrong credentials, unrelated student 403, role-area isolation, read-only route audit.
+- 2FA (9): enable, wrong password rejected, challenge on login, correct OTP login, wrong OTP rejected, no-session guard, disable restores normal login, student unaffected, non-teachers blocked.
+
+## 12. Regression
+Full suite: 136 passed, 13 failed — all 13 failures are PRE-EXISTING and unrelated to Sprint 68:
+- Auth\AuthenticationTest / RegistrationTest / EmailVerificationTest: Breeze boilerplate tests assuming email login and a `dashboard` route that do not exist in this platform (login here is mobile-based since Sprint 0).
+- Sprint30AuditTest: pre-existing seeder duplicate-key issues (UniqueConstraintViolationException).
+
+Manual spot checks of core flows (teacher/student/assistant login, dashboards, grades, attendance, lessons, resources, exams, reservations, reports, notifications) remain covered by their passing sprint test suites (Sprint 61–67 suites all green in this run).
+
+## 13. Feature Audit
+
+| Feature | Required | Implemented | Verified | Status |
+|---|---|---|---|---|
+| Messaging | Yes | Yes | Yes (feature tests) | COMPLETE |
+| Announcements | Yes | Yes | Yes (feature tests) | COMPLETE |
+| Parent Access | Yes | Yes | Yes (feature tests) | COMPLETE |
+| Two-Factor Authentication | Yes (Email OTP, teachers) | Yes | Yes (feature tests) | COMPLETE |
+
+Authorization matrix:
+
+| Feature | Teacher | Student | Assistant | Parent | Admin |
+|---|---|---|---|---|---|
+| Messaging | Full (own students) | Own threads only | ❌ Blocked | ❌ Blocked | ❌ N/A |
+| Announcements | CRUD own | View targeted only | ❌ Blocked | ❌ Blocked | ❌ N/A |
+| Parent Access | ❌ N/A | ❌ N/A | ❌ Blocked | Read-only own children | ❌ N/A |
+| 2FA | Enable/disable/use | Skipped (flag ignored) | ❌ Blocked | ❌ Blocked | ❌ N/A |
+
+## 14. Remaining Issues
+- Pre-existing dev-database migration drift (`activity_logs.owner_type` duplicate column) prevents full `php artisan migrate` on the shared sqlite file; Sprint 68 migrations were applied individually. Unrelated to this sprint's features.
+- Legacy Breeze auth tests (3 files) and Sprint30AuditTest fail for reasons predating Sprint 68; candidates for cleanup in a later sprint.
+- Runtime browser verification of parent UI pages deferred (covered by HTTP-level feature tests); heavy browser suite intentionally avoided per verification strategy.
+
+## HARD STOP
+Sprint 68 closed. No work started on Student Dashboard final resolution, Final Runtime QA, Security final audit, or Production sign-off (Sprints 69–71).

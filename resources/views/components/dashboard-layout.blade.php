@@ -93,6 +93,22 @@
                             <i class="bi bi-file-earmark-text text-lg"></i>
                             <span>الامتحانات</span>
                         </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.grades.index') }}" :active="request()->routeIs('teacher.grades.*')">
+                            <i class="bi bi-bar-chart text-lg"></i>
+                            <span>الدرجات</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.reports.index') }}" :active="request()->routeIs('teacher.reports.*')">
+                            <i class="bi bi-clipboard-data text-lg"></i>
+                            <span>التقارير</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.calendar.index') }}" :active="request()->routeIs('teacher.calendar.*')">
+                            <i class="bi bi-calendar3 text-lg"></i>
+                            <span>التقويم</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.progress.index') }}" :active="request()->routeIs('teacher.progress.*')">
+                            <i class="bi bi-graph-up-arrow text-lg"></i>
+                            <span>تتبع التقدم</span>
+                        </x-sidebar-link>
                         <x-sidebar-link href="{{ route('teacher.reservations.index') }}" :active="request()->routeIs('teacher.reservations.*')">
                             <i class="bi bi-calendar-check text-lg"></i>
                             <span>الحجوزات</span>
@@ -113,13 +129,23 @@
                             <i class="bi bi-trash text-lg"></i>
                             <span>سلة المحذوفات</span>
                         </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.messages.index') }}" :active="request()->routeIs('teacher.messages.*')">
+                            <i class="bi bi-chat-dots text-lg"></i>
+                            <span>الرسائل</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.announcements.index') }}" :active="request()->routeIs('teacher.announcements.*')">
+                            <i class="bi bi-megaphone text-lg"></i>
+                            <span>الإعلانات</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('teacher.settings.index') }}" :active="request()->routeIs('teacher.settings.*')">
+                            <i class="bi bi-gear text-lg"></i>
+                            <span>الإعدادات</span>
+                        </x-sidebar-link>
                         <x-sidebar-link href="{{ route('profile.edit') }}" :active="request()->routeIs('profile.*')">
                             <i class="bi bi-person text-lg"></i>
                             <span>حسابي</span>
                         </x-sidebar-link>
                     @elseif($currentUser->role === 'student')
->>>>>>>
-
                         <x-sidebar-link href="{{ route('student.resources.home') }}" :active="request()->routeIs('student.resources.*')">
                             <i class="bi bi-grid-1x2 text-lg"></i>
                             <span>المصادر</span>
@@ -132,9 +158,25 @@
                             <i class="bi bi-calendar-check text-lg"></i>
                             <span>الحجوزات</span>
                         </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('student.messages.index') }}" :active="request()->routeIs('student.messages.*')">
+                            <i class="bi bi-chat-dots text-lg"></i>
+                            <span>الرسائل</span>
+                        </x-sidebar-link>
                         <x-sidebar-link href="{{ route('notifications.index') }}" :active="request()->routeIs('notifications.*')">
                             <i class="bi bi-bell text-lg"></i>
                             <span>الإشعارات</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('student.grades') }}" :active="request()->routeIs('student.grades')">
+                            <i class="bi bi-bar-chart text-lg"></i>
+                            <span>درجاتي</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('student.attendance') }}" :active="request()->routeIs('student.attendance')">
+                            <i class="bi bi-clipboard-check text-lg"></i>
+                            <span>حضوري</span>
+                        </x-sidebar-link>
+                        <x-sidebar-link href="{{ route('student.settings') }}" :active="request()->routeIs('student.settings')">
+                            <i class="bi bi-gear text-lg"></i>
+                            <span>الإعدادات</span>
                         </x-sidebar-link>
                         <x-sidebar-link href="{{ route('student.account') }}" :active="request()->routeIs('student.account')">
                             <i class="bi bi-person text-lg"></i>
@@ -145,38 +187,58 @@
                             <i class="bi bi-speedometer2 text-lg"></i>
                             <span>لوحة المساعد</span>
                         </x-sidebar-link>
+                        @if($currentUser->canPerm('can_view_groups'))
                         <x-sidebar-link href="{{ route('assistant.groups.index') }}" :active="request()->routeIs('assistant.groups.*')">
                             <i class="bi bi-collection text-lg"></i>
                             <span>المجموعات</span>
                         </x-sidebar-link>
+                        @endif
+                        @if($currentUser->canPerm('can_manage_students'))
                         <x-sidebar-link href="{{ route('assistant.students.index') }}" :active="request()->routeIs('assistant.students.*')">
                             <i class="bi bi-people text-lg"></i>
                             <span>طلاب المدرس</span>
                         </x-sidebar-link>
+                        @endif
+                        @if($currentUser->canPerm('can_manage_lessons'))
                         <x-sidebar-link href="{{ route('assistant.lessons.index') }}" :active="request()->routeIs('assistant.lessons.*')">
                             <i class="bi bi-book text-lg"></i>
                             <span>الدروس</span>
                         </x-sidebar-link>
-                        <x-sidebar-link href="{{ route('assistant.resources.create') }}" :active="request()->routeIs('assistant.resources.create')">
+                        @endif
+                        @if($currentUser->canPerm('can_upload_resources'))
+                        <x-sidebar-link href="{{ route('assistant.resources.index') }}" :active="request()->routeIs('assistant.resources.*')">
                             <i class="bi bi-folder2 text-lg"></i>
                             <span>المصادر</span>
                         </x-sidebar-link>
+                        @endif
+                        @if($currentUser->canPerm('can_manage_exams'))
                         <x-sidebar-link href="{{ route('assistant.exams.index') }}" :active="request()->routeIs('assistant.exams.*')">
                             <i class="bi bi-file-earmark-text text-lg"></i>
                             <span>الامتحانات</span>
-                        </x-sidebar-link>
-                        <x-sidebar-link href="{{ route('assistant.reservations.create') }}" :active="request()->routeIs('assistant.reservations.create')">
-                            <i class="bi bi-calendar-check text-lg"></i>
-                            <span>الحجوزات</span>
-                        </x-sidebar-link>
-                        <x-sidebar-link href="{{ route('assistant.attendance.index') }}" :active="request()->routeIs('assistant.attendance.*')">
-                            <i class="bi bi-clipboard-check text-lg"></i>
-                            <span>الحضور</span>
                         </x-sidebar-link>
                         <x-sidebar-link href="{{ route('assistant.question-bank.index') }}" :active="request()->routeIs('assistant.question-bank.*')">
                             <i class="bi bi-question-circle text-lg"></i>
                             <span>بنك الأسئلة</span>
                         </x-sidebar-link>
+                        @endif
+                        @if($currentUser->canPerm('can_manage_grades'))
+                        <x-sidebar-link href="{{ route('assistant.grades.index') }}" :active="request()->routeIs('assistant.grades.*')">
+                            <i class="bi bi-bar-chart text-lg"></i>
+                            <span>الدرجات</span>
+                        </x-sidebar-link>
+                        @endif
+                        @if($currentUser->canPerm('can_manage_reservations'))
+                        <x-sidebar-link href="{{ route('assistant.reservations.index') }}" :active="request()->routeIs('assistant.reservations.*')">
+                            <i class="bi bi-calendar-check text-lg"></i>
+                            <span>الحجوزات</span>
+                        </x-sidebar-link>
+                        @endif
+                        @if($currentUser->canPerm('can_take_attendance'))
+                        <x-sidebar-link href="{{ route('assistant.attendance.index') }}" :active="request()->routeIs('assistant.attendance.*')">
+                            <i class="bi bi-clipboard-check text-lg"></i>
+                            <span>الحضور</span>
+                        </x-sidebar-link>
+                        @endif
                         <x-sidebar-link href="{{ route('assistant.notifications.index') }}" :active="request()->routeIs('assistant.notifications.*')">
                             <i class="bi bi-bell text-lg"></i>
                             <span>الإشعارات</span>
@@ -187,8 +249,6 @@
                         </x-sidebar-link>
                     @endif
                 </nav>
->>>>>>>
-
 
                 <!-- User Info -->
                 <div class="p-4 border-t border-border-light flex-shrink-0">
@@ -306,17 +366,17 @@
             <a href="{{ route('assistant.dashboard') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.dashboard') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
                 <i class="bi bi-speedometer2 text-xl"></i><span>الرئيسية</span>
             </a>
+            @if($currentUser->canPerm('can_view_groups'))
             <a href="{{ route('assistant.groups.index') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.groups.*') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
                 <i class="bi bi-collection text-xl"></i><span>المجموعات</span>
             </a>
+            @endif
             <a href="{{ route('assistant.notifications.index') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.notifications.*') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
                 <i class="bi bi-bell text-xl"></i><span>الإشعارات</span>
             </a>
             <a href="{{ route('assistant.profile.edit') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('assistant.profile.*') ? 'text-primary-600' : 'text-text-muted' }} transition-colors duration-150">
                 <i class="bi bi-person text-xl"></i><span>حسابي</span>
             </a>
->>>>>>>
-
         </nav>
         @endif
         @endif

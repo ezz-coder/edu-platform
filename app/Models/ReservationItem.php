@@ -33,6 +33,14 @@ class ReservationItem extends Model
         return $this->delivery_status === 'pending';
     }
 
+    /**
+     * Sprint 63: check if the student cancelled this reservation.
+     */
+    public function isCancelled(): bool
+    {
+        return $this->delivery_status === 'cancelled';
+    }
+
     public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class, 'reservation_id');

@@ -1,0 +1,10 @@
+PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.30
+Configuration: C:\laragon\www\edu-platform\phpunit.xml
+
+...............................                                   31 / 31 (100%)
+
+Time: 00:49.790, Memory: 62.00 MB
+
+[30;42mOK (31 tests, 196 assertions)[0m

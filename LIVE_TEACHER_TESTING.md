@@ -10,9 +10,9 @@
 ### 1. Login Feature
 **Status:** ✅ PASSED
 
-**Test Steps:**
-1. Open browser to http://127.0.0.1:8000/login
-2. Enter teacher credentials: teacher@bayan.local / Teacher@123
+**Test Steps:** http://127.0.0.1:8000/login
+2. Enter teacher credentials: teacher@bayan.loc
+1. Open browser toal / Teacher@123
 3. Click login button
 
 **Expected Results (from spec):**

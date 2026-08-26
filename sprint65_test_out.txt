@@ -1,0 +1,40 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sprint65StudentNotificationsAccountTest[39m
+  [32;1m✓[39;22m[90m [39m[90mteacher creating lesson notifies targeted students only[39m[90m                                                     [39m [90m2.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant creating lesson notifies students of teachers group[39m[90m                                               [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mteacher editing grade notifies only affected student[39m[90m                                                        [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90massistant editing grade notifies student and keeps teacher notification[39m[90m                                     [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90msettings page loads for student[39m[90m                                                                             [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstudent can change mobile validly and it persists[39m[90m                                                           [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid mobile is rejected[39m[90m                                                                                  [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mduplicate mobile owned by other family is rejected[39m[90m                                                          [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmobile change updates all sibling accounts and switching still works[39m[90m                                        [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mgrades page shows own grades only[39m[90m                                                                           [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mgrades page orders latest first and excludes unfinished[39m[90m                                                     [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mattendance page shows own records with correct totals[39m[90m                                                       [39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mattendance page counts late and absent[39m[90m                                                                      [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mguest cannot access new pages[39m[90m                                                                               [39m [90m0.26s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sprint65StudentNotificationsAccountTest[22m [90m>[39m attendance page counts late and a… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: attendance_sessions.started_at (Connection: sqlite, Database: :memory:, SQL: insert into "attendance_sessions" ("teacher_id", "study_group_id", "academic_term_id", "lesson_number", "attendance_date", "status", "updated_at", "created_at") values (1, 1, ?, 3, 2026-08-24 00:00:00, closed, 2026-08-24 03:48:58, 2026-08-24 03:48:58))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m857[39m
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m857[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m601[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: attendance_sessions.started_at")[39m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m13 passed[39;22m[90m (55 assertions)[39m
+  [90mDuration:[39m [39m8.13s[39m
+

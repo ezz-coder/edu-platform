@@ -18,6 +18,20 @@
         </div>
 
         <!-- Allowed actions only -->
+        @php
+            $featurePermissions = [
+                'can_take_attendance',
+                'can_manage_students',
+                'can_view_groups',
+                'can_manage_lessons',
+                'can_upload_resources',
+                'can_manage_reservations',
+                'can_manage_exams',
+                'can_manage_grades',
+            ];
+            $hasAnyFeaturePermission = collect($featurePermissions)->contains(fn ($p) => $assistant->canPerm($p));
+        @endphp
+
         <h2 class="text-lg font-bold text-gray-900">الإجراءات المتاحة</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @if ($assistant->canPerm('can_take_attendance'))
@@ -38,11 +52,29 @@
                 </a>
             @endif
 
+            @if ($assistant->canPerm('can_view_groups'))
+                <a href="{{ route('assistant.groups.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-yellow-400 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-yellow-50 text-yellow-700 flex items-center justify-center text-xl"><i class="bi bi-collection"></i></span>
+                        <span class="font-semibold text-gray-900">مشاهدة المجموعات</span>
+                    </div>
+                </a>
+            @endif
+
+            @if ($assistant->canPerm('can_manage_lessons'))
+                <a href="{{ route('assistant.lessons.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-teal-400 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center text-xl"><i class="bi bi-book"></i></span>
+                        <span class="font-semibold text-gray-900">إدارة الدروس</span>
+                    </div>
+                </a>
+            @endif
+
             @if ($assistant->canPerm('can_upload_resources'))
-                <a href="{{ route('assistant.resources.create') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-green-400 transition">
+                <a href="{{ route('assistant.resources.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-green-400 transition">
                     <div class="flex items-center gap-3">
                         <span class="w-10 h-10 rounded-full bg-green-50 text-green-700 flex items-center justify-center text-xl"><i class="bi bi-files"></i></span>
-                        <span class="font-semibold text-gray-900">رفع الموارد</span>
+                        <span class="font-semibold text-gray-900">إدارة الموارد</span>
                     </div>
                 </a>
             @endif
@@ -56,19 +88,40 @@
                 </a>
             @endif
 
-            @if ($assistant->canPerm('can_view_groups'))
-                <a href="{{ route('assistant.groups.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-yellow-400 transition">
+            @if ($assistant->canPerm('can_manage_exams'))
+                <a href="{{ route('assistant.exams.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-red-400 transition">
                     <div class="flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-full bg-yellow-50 text-yellow-700 flex items-center justify-center text-xl"><i class="bi bi-collection"></i></span>
-                        <span class="font-semibold text-gray-900">مشاهدة المجموعات</span>
+                        <span class="w-10 h-10 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-xl"><i class="bi bi-file-earmark-text"></i></span>
+                        <span class="font-semibold text-gray-900">إدارة الامتحانات</span>
                     </div>
                 </a>
             @endif
 
-            @if (! $assistant->permissions || collect([
-                'can_take_attendance','can_manage_students','can_upload_resources',
-                'can_manage_reservations','can_restore_students','can_view_groups'
-            ])->every(fn ($p) => ! $assistant->canPerm($p)))
+            @if ($assistant->canPerm('can_manage_grades'))
+                <a href="{{ route('assistant.grades.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-orange-400 transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-orange-50 text-orange-700 flex items-center justify-center text-xl"><i class="bi bi-bar-chart"></i></span>
+                        <span class="font-semibold text-gray-900">إدارة الدرجات</span>
+                    </div>
+                </a>
+            @endif
+
+            <!-- Always available (no permission required per specification) -->
+            <a href="{{ route('assistant.notifications.index') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-sky-400 transition">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-sky-50 text-sky-700 flex items-center justify-center text-xl"><i class="bi bi-bell"></i></span>
+                    <span class="font-semibold text-gray-900">الإشعارات</span>
+                </div>
+            </a>
+
+            <a href="{{ route('assistant.profile.edit') }}" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:border-gray-400 transition">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-gray-100 text-gray-700 flex items-center justify-center text-xl"><i class="bi bi-person"></i></span>
+                    <span class="font-semibold text-gray-900">الملف الشخصي</span>
+                </div>
+            </a>
+
+            @if (! $hasAnyFeaturePermission)
                 <div class="col-span-full bg-gray-50 border border-gray-200 rounded-lg p-6 text-center text-gray-500">
                     لا توجد صلاحيات مفعّلة لحسابك حالياً. يرجى التواصل مع المدرس.
                 </div>

@@ -47,8 +47,18 @@
             </div>
 
             @if($already)
-                <div class="mt-4 pt-4 border-t">
+                <div class="mt-4 pt-4 border-t space-y-3">
                     <p class="text-green-700 font-medium text-center">تم الحجز مسبقاً</p>
+                    {{-- Sprint 63: student can cancel a pending (not delivered) reservation --}}
+                    @if($already->isPending() && $reservation->isOpen())
+                        <form method="POST" action="{{ route('student.reservations.cancel', $already) }}"
+                              onsubmit="return confirm('هل أنت متأكد من إلغاء الحجز؟');">
+                            @csrf
+                            <button type="submit" class="w-full py-2 bg-red-50 text-red-700 border border-red-200 rounded-lg hover:bg-red-100 transition font-medium">
+                                <i class="bi bi-x-circle"></i> إلغاء الحجز
+                            </button>
+                        </form>
+                    @endif
                 </div>
             @elseif($reservation->isOpen())
                 <form method="POST" action="{{ route('student.reservations.reserve', $reservation) }}" class="mt-4">
